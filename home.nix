@@ -68,6 +68,9 @@ in
     pkgs.gcc
     pkgs.rustc
     pkgs.cargo
+    pkgs.bitwarden-desktop
+    pkgs.bitwarden
+    pkgs.bitwarden-cli
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

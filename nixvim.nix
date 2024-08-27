@@ -23,6 +23,13 @@
 
     plugins = {
 
+
+      alpha = {
+        enable = true;
+
+        theme = "dashboard";
+      };
+
       lualine = {
         enable = true;
         globalstatus = true;
@@ -37,6 +44,10 @@
       project-nvim = {
 
         enable = true;
+
+        manualMode = false;
+        patterns = [ ".git" "compile-commands.json"];
+
       };
 
       telescope = {
@@ -141,7 +152,7 @@
           autoEnableSources = true;
 
           completion = {
-            keyword_length = 3;
+         #   keyword_length = 3;
           };
 
           sources = [
