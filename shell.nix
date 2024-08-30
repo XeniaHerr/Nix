@@ -6,6 +6,7 @@ programs.zsh = {
 	enableCompletion = true;
 	autosuggestion.enable = true;
 	syntaxHighlighting.enable = true;
+        syntaxHighlighting.catppuccin.enable = true;
 
 	shellAliases = { 
 	".." = "cd ..";
@@ -24,10 +25,11 @@ programs.zsh = {
 
 	oh-my-zsh = {
 	enable = true;
-	plugins = [ "git" 
-                "ssh"
-                "zoxide"
-              "alias-finder" ];
+        plugins = [ "git" 
+        "ssh"
+        "zoxide"
+        "alias-finder" 
+        "eza" ];
 	theme = "robbyrussell";
 	};
 };
@@ -46,5 +48,7 @@ programs.zoxide = {
 programs.fzf = {
 	enable = true;
 	enableZshIntegration = true;
+
+        defaultOptions = [ "--ansi" "--border=double"];
 	};
 }

@@ -27,7 +27,7 @@
       alpha = {
         enable = true;
 
-        theme = "dashboard";
+        theme = "startify";
       };
 
       lualine = {
@@ -65,8 +65,18 @@
             action = "live_grep";
             options = {
               desc = "live grep";
-
-
+            };
+          };
+          "<leader>fm" = {
+            action = "marks";
+            options = {
+              desc = "Find marks";
+            };
+          };
+          "<leader>fb" = {
+            action = "buffers";
+            options = {
+              desc = "Find buffers";
             };
           };
         };
@@ -244,6 +254,7 @@
         fugitive
         vimtex
         friendly-snippets
+        vim-obsession
       ];
 
       opts = {
@@ -254,13 +265,38 @@
 
       keymaps = [
         { key ="<M-p>";
-        mode = ["i" "n"];
+        mode = ["i" "n" "t"];
         action = "<cmd>:bp<CR>";
       }
       { key ="<M-n>";
-      mode = ["i" "n"];
+      mode = ["i" "n" "t"];
       action = "<cmd>:bn<CR>";
     }
+    { key = "<Esc>";
+    mode = ["t"];
+    action = "<C-\\><C-n>";
+  }
+
+  {key = "<A-h>";
+  mode = ["n" "i" "t"];
+  action = "<C-w>h";
+  }
+  {key = "<A-j>";
+  mode = ["n" "i" "t"];
+  action = "<C-w>j";
+  }
+  {key = "<A-k>";
+  mode = ["n" "i" "t"];
+  action = "<C-w>k";
+  }
+  {key = "<A-l>";
+  mode = ["n" "i" "t"];
+  action = "<C-w>l";
+  }
+
+  {key = "<C-BS>";
+  mode = ["i"];
+  action = "<C-w>";}
   ];
 
 
@@ -269,4 +305,7 @@
 
 
 };
+
+
+
 }

@@ -79,6 +79,8 @@ xsession.windowManager.i3 = {
       "${mod}+k" = "focus up";
       "${mod}+l" = "focus right";
       "${mod}+Shift+e" = "exit";
+
+      "${mod}+f" = "fullscreen toggle";
       };
       fonts = {
         names = [ "Mononoki" ];

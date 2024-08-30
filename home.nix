@@ -22,8 +22,10 @@ in
     ./i3.nix
     # For home-manager
     nixvim.homeManagerModules.nixvim
+    <catppuccin/modules/home-manager>
     ./nixvim.nix
-    ./htop.nix
+    ./btop.nix
+    ./tmux.nix
   ];
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -33,6 +35,12 @@ in
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
   home.stateVersion = "24.05"; # Please read the comment before changing.ty
+
+  gtk.enable = true;
+
+  #Colorsheme
+  #catppuccin.enable = true;
+  #gtk.catppuccin.enable = true;
 
 
   fonts.fontconfig.enable = true;
@@ -71,6 +79,7 @@ in
     pkgs.bitwarden-desktop
     pkgs.bitwarden
     pkgs.bitwarden-cli
+    pkgs.eza
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -104,7 +113,7 @@ in
   #  /etc/profiles/per-user/xenia/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+     EDITOR = "nvim";
   };
 
 
