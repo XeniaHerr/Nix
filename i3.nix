@@ -48,7 +48,8 @@ xsession.windowManager.i3 = {
       ];
       modifier = mod;
       keybindings = {
-      "${mod}+p" = "exec ${pkgs.dmenu}/bin/dmenu_run";
+      "${mod}+p" = "exec dmenu_run";
+     # "${mod}+Shift+p" = "exec ${pkgs.dmenu}/bin/dmenu_run";
       "${mod}+Return" = "exec ${pkgs.kitty}/bin/kitty";
       "${mod}+1" = "workspace 1";
       "${mod}+2" = "workspace 2";
@@ -72,7 +73,6 @@ xsession.windowManager.i3 = {
       "${mod}+Shift+7" = "move to workspace 7";
       "${mod}+Shift+8" = "move to workspace 8";
       "${mod}+Shift+9" = "move to workspace 9";
-
 
       "${mod}+j" = "focus down";
       "${mod}+h" = "focus left";

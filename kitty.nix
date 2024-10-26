@@ -1,19 +1,19 @@
 {configs, pkgs, ... }: {
 
-programs.kitty = {
+  programs.kitty = {
 
-enable = true;
-
-
-font = {
-	name = "Mononoki Nerd Font";
-	size = 14;
-	};
-
-theme = "Catppuccin-Mocha";
+    enable = true;
 
 
-};
+    font = {
+      name = "Mononoki Nerd Font";
+      size = 14;
+    };
+
+    themeFile = "Catppuccin-Mocha";
+
+
+  };
 
 }
 

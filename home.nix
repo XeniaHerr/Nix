@@ -6,6 +6,25 @@ let
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
      ref = "nixos-24.05";
   });
+
+  Wind2 = import ./Wind2/default.nix {inherit pkgs;};
+
+
+  dmenu_patched = pkgs.dmenu.overrideAttrs ( {
+    patches = [ ./dmenu-patches/nushell.diff
+    (pkgs.fetchpatch {
+
+      url ="https://tools.suckless.org/dmenu/patches/fuzzymatch/dmenu-fuzzymatch-5.3.diff";
+      hash = "sha256-uPuuwgdH2v37eaefnbQ93ZTMvUBcl3LAjysfOEPD1Y8=";
+    })
+#    (pkgs.fetchpatch {
+ #     url = "https://tools.suckless.org/dmenu/patches/fuzzyhighlight/dmenu-fuzzyhighlight-5.3.diff";
+  #    hash ="sha256-YdXuqqxF3MdfRfYPcyXLkWKqLDBJ6SNv4fMBoIQ+UNE=";
+   # })
+   # These two patches dont work together. I have to manually patch them into a single patc and apply it locally.
+                ];
+  }
+    );
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -16,7 +35,7 @@ in
 
   imports = [ 
     ./git.nix 
-    ./shell.nix
+    ./zsh.nix
     ./kitty.nix
     ./fastfetch.nix
     ./i3.nix
@@ -26,6 +45,8 @@ in
     ./nixvim.nix
     ./btop.nix
     ./tmux.nix
+    ./Wind2/Wind.nix
+    ./nushell.nix
   ];
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -79,8 +100,44 @@ in
     pkgs.bitwarden-desktop
     pkgs.bitwarden
     pkgs.bitwarden-cli
-    pkgs.eza
+    pkgs.wpa_supplicant_gui
+    pkgs.texlive.combined.scheme-full
+    pkgs.man-pages
+    pkgs.man-pages-posix
+    (pkgs.callPackage ./Wind2/default.nix {})
+    pkgs.direnv
+
+    #pkgs.dmenu.override { patches = [ ./dmenu-patches/nushell.diff];}
+    dmenu_patched
+
+
+
+    pkgs.bat
+    pkgs.dust
+
+
+    pkgs.nodejs
+    pkgs.zathura
+
+
+    pkgs.xclip
+    pkgs.openconnect
+
+
+    pkgs.manix
+
   ];
+
+#documentation.dev.enable = true;
+  
+#programs.dmenu.enable = true;
+
+#programs.dmenu.package = pkgs.dmenu.override {
+
+ # patches = [ ./dmenu-patches/nushell.diff];
+
+#};
+  programs.emacs.enable = true;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -117,6 +174,38 @@ in
   };
 
 
+  # Wind test
+  xsession.windowManager.Wind.enable = true;
+
+  xsession.windowManager.Wind.config = {
+    WindowGap = 5;
+
+    TopicNames = [ "This" "is" "a" "Test" ];
+
+
+    Keys = [
+
+      {
+        key = "p";
+
+        argument = "dmenu_run";
+
+        modifiers = [ "Mod"];
+
+        action = "spawn";
+      }
+
+      {key = "q";
+
+      action = "quit";
+
+    modifiers = ["Mod" "Shift"];
+
+    argument = 10;
+  }
+    ];
+  };
+  
   
 
   # Let Home Manager install and manage itself.
