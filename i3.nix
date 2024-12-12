@@ -81,6 +81,10 @@ xsession.windowManager.i3 = {
       "${mod}+Shift+e" = "exit";
 
       "${mod}+f" = "fullscreen toggle";
+      "${mod}+i" = " exec flameshot gui";
+
+      "${mod}+Shift+greater" = "move workspace to output right";
+      "${mod}+Shift+less" = "move workspace to output left";
       };
       fonts = {
         names = [ "Mononoki" ];
@@ -185,6 +189,7 @@ enable = true;
     settings.theme.theme = "ctp-mocha";
   };
 };
+
 
 
 };

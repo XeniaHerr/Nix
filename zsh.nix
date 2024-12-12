@@ -29,7 +29,6 @@
       "ssh"
       "zoxide"
       "alias-finder" 
-      "eza"
       "direnv" ];
       theme = "robbyrussell";
     };

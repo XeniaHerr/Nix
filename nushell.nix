@@ -12,7 +12,7 @@
   text =  ''
 
   let carapace_completer = { |spans| 
-  carapace $spans.0. nushell $spans | from json }
+  carapace $spans.0 nushell ...$spans | from json }
 
   $env.config = {
 
@@ -30,13 +30,18 @@
 
   }
 
-
+$env.EDITOR = "nvim"
   '';
 };
 
 
   extraConfig = ''
 # Search nixpkgs and provide table output
+
+
+
+use ${pkgs.nu_scripts}/share/nu_scripts/modules/background_task/task.nu
+
 export def ns [
     term: string # Search target.
 ] {

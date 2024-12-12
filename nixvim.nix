@@ -13,6 +13,7 @@
     };
 
   in
+
   
   {
 
@@ -47,12 +48,19 @@
 
       lualine = {
         enable = true;
-        globalstatus = true;
+        settings.options.globalstatus = true;
 
+      };
+
+      web-devicons = {
+        enable = true;
       };
 
       luasnip = {
         enable = true;
+        fromLua = [
+          { paths = "~/snippets";}
+        ];
       };
 
 
@@ -60,8 +68,13 @@
 
         enable = true;
 
+
+        
+        settings = {
         manualMode = false;
+
         patterns = [ ".git" "compile-commands.json"];
+        };
 
       };
 
@@ -118,6 +131,7 @@
             nu = "nu";
 extraConfigLua =
           ''
+
             do
               local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
               -- change the following as needed
@@ -155,18 +169,19 @@ extraConfigLua =
         vim.keymap.set("n", "<leader>wr", function () vim.lsp.buf.remove_workspace_folder() end, opts)
         vim.keymap.set("n", "<leader>==", function () vim.lsp.buf.format() end, opts)
         vim.keymap.set("n", "<leader>Kd", function () vim.diagnostic.open_float(nil, {focusable = true}) end, opts)
-        vim.keymap.set("n", "<leader>fd", function () require('telescope.builtins').diagnostics() end, opts)
+        vim.keymap.set("n", "<leader>fd", function () require('telescope.builtin').diagnostics() end, opts)
         '';
 
         servers = {
 
           clangd.enable = true;
+          clangd.cmd = [ "clangd" "--header-insertion=iwyu" "--background-index" "--function-arg-placeholders=false"];
 
           bashls.enable = true;
 
           nixd.enable = true;
 
-          lua-ls.enable = true;
+          lua_ls.enable = true;
 
           nushell.enable = true;
 
@@ -218,6 +233,10 @@ extraConfigLua =
       };
       cmp_luasnip = {
         enable = true;
+
+      };
+      cmp-nvim-lsp-signature-help = {
+        enable = true;
       };
       cmp = {
         enable = true;
@@ -234,6 +253,7 @@ extraConfigLua =
          { name = "zsh"; }
          { name = "path";}
          {name = "luasnip";}
+         {name = "nvim_lsp_signature_help";}
        ];
 
        snippet.expand = 
@@ -248,8 +268,9 @@ extraConfigLua =
          cmp.mapping.preset.insert({
            ['<C-p>'] = cmp.mapping.select_prev_item(),
            ['<C-n>'] = cmp.mapping.select_next_item(),
-           ['<Tab>'] = cmp.mapping.confirm({select = true}),
-           ['<C-Space>'] = cmp.mapping.complete(),
+           ['<C-w>'] = cmp.mapping.confirm({select = true}),
+           ['<C-e>'] = cmp.mapping.abort(),
+         --['<C-Space>'] = cmp.mapping.complete(),
          })'';
        };
 
@@ -308,16 +329,14 @@ extraConfigLua =
 
 
 
-  jupytext = {
-    enable = true;
-  };
-
 
 
 
    nvim-autopairs = {
 
      enable = true;
+
+
    };
 
 
@@ -340,15 +359,6 @@ extraConfigLua =
    vim-obsession
    vimtex
    tabular
-   (pkgs.vimUtils.buildVimPlugin {
-     name = "jupynium";
-     src = pkgs.fetchFromGitHub {
-       owner = "kiyoon";
-       repo = "jupynium.nvim";
-       rev = "master";
-       sha256 = "sha256-tSm4dTVtthtmEM8Fe+dVAELnhNUpOgSsfvFKwq8uLf8=";
-     };
-   })
  ];
 
  opts = {
@@ -419,6 +429,21 @@ extraConfigLua =
 
 
 
+ vim.g.copilot_no_tab_map = true
+
+
+
+ _G.snip_or_tab = function()
+ local ls = require("luasnip")
+ if ls.expand_or_jumpable() then
+ return "<Plug>luasnip-expand-or-jump"
+ else 
+ return "<Tab>"
+ end
+ end
+
+ 
+
 
 
  '';
@@ -466,15 +491,26 @@ action = "<C-w>l";
 mode = ["i" "n"];
 action = "<cmd>:set number hlsearch!<CR>";
  }
+ { key = "<Tab>";
+ mode = ["i"];
+ action = "v:lua.snip_or_tab()";
+ options = {expr = true;};
+} 
+ { key = "<S-Tab>";
+ mode = ["i"];
+ action = "<cmd>lua require\"luasnip\".jump(-1)<CR>";
+} 
+{key = "<C-]>";
+mode = ["i"];
+action = "<cmd>lua if require\"luasnip\".choice_active() then require\"luasnip\".change_choice() end<CR>";}
   ];
 
 
 
-
+#action = "<cmd>lua if require\"luasnip\".expand_or_jumpable() then return \"<Plug>luasnip-expand-or-jump\" else return \"<Tab>\" end<CR>";
 
 
 };
-
 
 
 }

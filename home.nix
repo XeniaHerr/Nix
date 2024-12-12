@@ -4,7 +4,7 @@ let
   nixvim = import (builtins.fetchGit {
     url = "https://github.com/nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
-     ref = "nixos-24.05";
+     #ref = "nixos-25.05";
   });
 
   Wind2 = import ./Wind2/default.nix {inherit pkgs;};
@@ -25,6 +25,9 @@ let
                 ];
   }
     );
+    tex = (pkgs.texlive.combine {
+  inherit (pkgs.texlive) scheme-full graphviz xifthen;
+    });
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -32,6 +35,7 @@ in
   home.username = "xenia";
   home.homeDirectory = "/home/xenia";
 
+  services.pueue.enable = true;
 
   imports = [ 
     ./git.nix 
@@ -47,6 +51,7 @@ in
     ./tmux.nix
     ./Wind2/Wind.nix
     ./nushell.nix
+    ./hyprland.nix
   ];
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -77,7 +82,10 @@ in
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
-     (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" "Iosevka" "Mononoki" ]; })
+     #(pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" "Iosevka" "Mononoki" ]; })
+     pkgs.nerd-fonts.mononoki
+     pkgs.nerd-fonts.fantasque-sans-mono
+     pkgs.nerd-fonts.iosevka
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -96,21 +104,29 @@ in
     pkgs.nitrogen
     pkgs.gcc
     pkgs.rustc
-    pkgs.cargo
     pkgs.bitwarden-desktop
     pkgs.bitwarden
     pkgs.bitwarden-cli
     pkgs.wpa_supplicant_gui
-    pkgs.texlive.combined.scheme-full
+    #pkgs.texlive.combined.scheme-full
+    tex
+    pkgs.texlivePackages.graphviz
+
+
     pkgs.man-pages
     pkgs.man-pages-posix
     (pkgs.callPackage ./Wind2/default.nix {})
     pkgs.direnv
+    pkgs.flameshot
+    pkgs.youtube-music
+    pkgs.cliphist
 
     #pkgs.dmenu.override { patches = [ ./dmenu-patches/nushell.diff];}
-    dmenu_patched
+    #dmenu_patched
+    pkgs.dmenu
 
 
+    pkgs.goldwarden
 
     pkgs.bat
     pkgs.dust
@@ -122,9 +138,11 @@ in
 
     pkgs.xclip
     pkgs.openconnect
+    #pkgs.hyprpaper
 
 
     pkgs.manix
+    pkgs.nu_scripts
 
   ];
 
@@ -137,6 +155,8 @@ in
  # patches = [ ./dmenu-patches/nushell.diff];
 
 #};
+
+
   programs.emacs.enable = true;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

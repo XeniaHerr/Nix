@@ -6,8 +6,9 @@
 
 
     font = {
-      name = "Mononoki Nerd Font";
+      name = "Mononoki";
       size = 14;
+      #package = pkgs.nerd-fonts.mononoki;
     };
 
     themeFile = "Catppuccin-Mocha";
