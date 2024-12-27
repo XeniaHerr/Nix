@@ -9,6 +9,7 @@
       bind = [
         "$mod, Return, exec, kitty"
         "$mod, x, exec, firefox"
+        "$mod, d, exec, Orkan run"
         "$mod SHIFT, Q, exit"
         "$mod, F, fullscreen, 0"
         "$mod, w, killactive"

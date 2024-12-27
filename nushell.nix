@@ -70,6 +70,7 @@ export def ns [
     nv = "nvim";
 
     cat = "bat";
+    ecc = "emacsclient -c";
   };
 };
 

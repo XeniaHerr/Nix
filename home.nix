@@ -3,12 +3,16 @@
 let
   nixvim = import (builtins.fetchGit {
     url = "https://github.com/nix-community/nixvim";
-    # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
+    # If you are not running an unstable channel of nixpnkgs, select the corresponding branch of nixvim.
      #ref = "nixos-25.05";
   });
 
   Wind2 = import ./Wind2/default.nix {inherit pkgs;};
 
+  orkan = import ./orkan/default.nix {inherit pkgs;};
+
+
+  
 
   dmenu_patched = pkgs.dmenu.overrideAttrs ( {
     patches = [ ./dmenu-patches/nushell.diff
@@ -37,6 +41,14 @@ in
 
   services.pueue.enable = true;
 
+
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
+    }))
+  ]
+  ;
+
   imports = [ 
     ./git.nix 
     ./zsh.nix
@@ -50,8 +62,10 @@ in
     ./btop.nix
     ./tmux.nix
     ./Wind2/Wind.nix
+    ./emacs.nix 
     ./nushell.nix
     ./hyprland.nix
+    ./orkan/orkanmodule.nix
   ];
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -82,10 +96,10 @@ in
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
-     #(pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" "Iosevka" "Mononoki" ]; })
-     pkgs.nerd-fonts.mononoki
-     pkgs.nerd-fonts.fantasque-sans-mono
-     pkgs.nerd-fonts.iosevka
+    #(pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" "Iosevka" "Mononoki" ]; })
+    pkgs.nerd-fonts.mononoki
+    pkgs.nerd-fonts.fantasque-sans-mono
+    pkgs.nerd-fonts.iosevka
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -94,6 +108,7 @@ in
     #   echo "Hello, ${config.home.username}!"
     # '')
 
+    pkgs.ghostscript
 
     pkgs.betterdiscord-installer
     pkgs.discord
@@ -116,12 +131,13 @@ in
     pkgs.man-pages
     pkgs.man-pages-posix
     (pkgs.callPackage ./Wind2/default.nix {})
+    (pkgs.callPackage ./orkan/default.nix {})
     pkgs.direnv
     pkgs.flameshot
     pkgs.youtube-music
     pkgs.cliphist
 
-    #pkgs.dmenu.override { patches = [ ./dmenu-patches/nushell.diff];}
+
     #dmenu_patched
     pkgs.dmenu
 
@@ -144,20 +160,13 @@ in
     pkgs.manix
     pkgs.nu_scripts
 
+
+
   ];
 
-#documentation.dev.enable = true;
-  
-#programs.dmenu.enable = true;
-
-#programs.dmenu.package = pkgs.dmenu.override {
-
- # patches = [ ./dmenu-patches/nushell.diff];
-
-#};
 
 
-  programs.emacs.enable = true;
+
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -190,7 +199,7 @@ in
   #  /etc/profiles/per-user/xenia/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-     EDITOR = "nvim";
+    EDITOR = "nvim";
   };
 
 
@@ -217,15 +226,17 @@ in
 
       {key = "q";
 
-      action = "quit";
+       action = "quit";
 
-    modifiers = ["Mod" "Shift"];
+       modifiers = ["Mod" "Shift"];
 
-    argument = 10;
-  }
+       argument = 10;
+      }
     ];
   };
   
+  programs.orkan.enable = true;
+
   
 
   # Let Home Manager install and manage itself.
