@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "XeniaHerr";
     repo = "Orkan";
     rev = "master";
-    sha256 = "sha256-ANx2dCPdjwhuVM33m0/q9OK+ZyIqQKad6YKR3lQ0S+4=";
+    sha256 = "sha256-Cqzl1NaWyUW5myk+UCGh8bIkPrhUT/Dkip6lfniJEHA=";
 
   };
 

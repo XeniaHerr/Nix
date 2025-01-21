@@ -6,7 +6,7 @@
 
 
     font = {
-      name = "Mononoki";
+      name = "Mononoki Nerd Font";
       size = 14;
       #package = pkgs.nerd-fonts.mononoki;
     };

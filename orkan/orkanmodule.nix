@@ -6,17 +6,15 @@ in
   {
   options.programs.orkan = 
 
-{
+    {
 
-  enable = lib.mkEnableOption "orkan";
+      enable = lib.mkEnableOption "orkan";
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.callPackage ./default.nix {};
+      };
 
-  package = lib.mkOption {
-    type = lib.types.package;
-    default = pkgs.callPackage ./default.nix {};
-  };
-
-
-  };
+    };
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.package ];
 };

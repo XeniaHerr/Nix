@@ -23,6 +23,11 @@ in
       enable = true;
 
 
+    extraConfigVim = ''
+      set noshelltemp
+    '';
+
+
       globals = {
         mapleader = " ";
       };
@@ -39,6 +44,44 @@ in
 
       plugins = {
 
+
+
+
+      #telekasten = {
+      # enable = true;
+        #  settings = {
+        # home = {
+        #   __raw = ''vim.fn.expand("~/zettelkasten")'';
+        # };
+      # };
+
+      orgmode = {
+        enable = true;
+        settings = {
+          org_agenda_files = "~/org/**/*";
+          org_default_notes_file = "~/org/notes.org";
+        };
+      };
+
+      sniprun = {
+        enable = true;
+      };
+
+
+
+      #  luaConfig.post = ''
+      #    vim.keymap.set("n", "<leader>z", "<cmd>Telekasten panel<CR>")
+      #    vim.keymap.set("n", "<leader>zf", "<cmd>Telekasten find_notes<CR>")
+      #    vim.keymap.set("n", "<leader>zn", "<cmd>Telekasten new_note<CR>")
+      #   vim.keymap.set("n", "<leader>zt", "<cmd>Telekasten got_today<CR>")
+    #      vim.keymap.set("n", "<leader>zc", "<cmd>Telekasten show_calendar<CR>")
+      #        '';
+      # };
+
+      colorizer = {
+        enable = true;
+        lazyLoad.enable = false;
+      };
 
 
         alpha = {
@@ -116,7 +159,13 @@ in
                 desc = "Find help tags";
               };
             };
+          "<leader>fk" = {
+            action = "keymaps";
+            options = {
+              desc = "Find keymaps";
+            };
           };
+        };
 
         };
 
@@ -221,6 +270,7 @@ in
                 vim.keymap.set("n", "<leader>==", function () vim.lsp.buf.format() end, opts)
                 vim.keymap.set("n", "<leader>Kd", function () vim.diagnostic.open_float(nil, {focusable = true}) end, opts)
                 vim.keymap.set("n", "<leader>fd", function () require('telescope.builtin').diagnostics() end, opts)
+                vim.lsp.inlay_hint.enable(true, {0})
               '';
 
               servers = {
@@ -235,6 +285,9 @@ in
                 lua_ls.enable = true;
 
                 nushell.enable = true;
+
+                fish_lsp.enable = true;
+                texlab.enable = true;
 
               };
             };
@@ -305,6 +358,7 @@ in
          { name = "path";}
          {name = "luasnip";}
          {name = "nvim_lsp_signature_help";}
+            {name = "orgmode";}
        ];
 
        snippet.expand = 
@@ -392,32 +446,50 @@ in
 
 
 
-             copilot-vim = {
-               enable = true;
-             };
+      #copilot-vim = {
+      #        enable = true;
+      #      };
 
 
              vimtex = {
                enable = true;
+
+        settings = {
+          compiler_method = "lualatex";
+            view_method = "zathura";
+        };
              };
 
 
            };
-           extraPlugins = with pkgs.vimPlugins; [
-             vim-nix
-             fugitive
-             friendly-snippets
-             vim-obsession
-             vimtex
-             tabular
-              vim-visual-multi
-           ];
+    extraPlugins = with pkgs.vimPlugins; [
+      vim-nix
+      fugitive
+      friendly-snippets
+      vim-obsession
+      tabular
+      vim-visual-multi
+    ];
 
            opts = {
              number = true;
 
              shiftwidth = 4;
+        
            };
+
+    autoCmd = [
+      { event = "FileType";
+        pattern = [ "*.md" "markdown"];
+        callback = {
+      __raw = ''
+        function() 
+          print("Enter markdown")
+          vim.keymap.set("n", "<leader>cc", "<cmd>Telekasten toggle_todo<CR>", "{ buffer = true}") end
+      '';
+        };
+      }
+    ];
 
 
            extraConfigLua = ''
@@ -481,7 +553,7 @@ in
 
 
 
-             vim.g.copilot_no_tab_map = true
+             --vim.g.copilot_no_tab_map = true
 
 
 
@@ -562,6 +634,6 @@ action = "<cmd>lua if require\"luasnip\".choice_active() then require\"luasnip\"
   ];
 
 };
-
-
 }
+
+

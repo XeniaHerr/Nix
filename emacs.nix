@@ -13,6 +13,8 @@
 
       defaultInitFile = true;
 
+      extraEmacsPackages = epkgs: [
+      epkgs.visual-replace ];
 
     });
   };

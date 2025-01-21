@@ -1,10 +1,22 @@
 {config, pkgs, ... }: {
 
 
-programs.git.enable = true;
 
-programs.git.userName = "Xenia Herr";
+  home.packages = [ 
+    pkgs.gh
+    pkgs.git
+  ];
 
-programs.git.userEmail = "xeniaherr@gmail.com";
+
+  programs.git = {
+
+    enable = true;
+
+    userName = "Xenia Herr";
+
+    userEmail = "xeniaherr@gmail.com";
+
+  };
+
 
 }

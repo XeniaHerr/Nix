@@ -52,18 +52,33 @@
             "$mod, mouse:273, resizewindow"
           ];
 
+      debug.disable_logs = false;
+
+          exec-once = [ "eww open example" "eww open activatelinux"];
+
           monitor = [
             "desc:Acer Technologies VG270 0x13704B20, preferred, 1200x0, 1, transform, 1"
             "desc:Acer Technologies VG270U P TEHEE00A854F, preferred, 2280x0, 1"
             "desc:Acer Technologies VG270 0x13703D9F, preferred, 4840x0, 1"
             "desc:Optoma Corporation Optoma 1080P, preferred, auto, 1, mirror, eDP-1"
+            "desc:BOE 0x0B66, 1920x1200@60, auto, 1"
           ];
 
           input = {
             kb_layout = "us,de";
 
             kb_options = "grp:shifts_toggle";
+
+            touchpad = {
+
+              tap-to-click = false;
+            };
           };
+
+         # device = {
+
+         #   key = "Enter, bincode:36";
+          #};
 
 
           general = {
@@ -127,20 +142,7 @@
 
 
           };
-       #   shadow = {
-
-        #    enabled = true;
-
-         #   range = 2;
-          #  render_power = 2;
-          #  color = "rgba(1a1a1aee)";
-          #};
-          input = {
-            touchpad = {
-
-              tap-to-click = false;
-            };
-          };
+       
         };
       };
     }

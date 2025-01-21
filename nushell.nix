@@ -1,8 +1,13 @@
+
 {config, pkgs, ...}: 
 
 {
 
 
+  home.packages = [
+    pkgs.nushell
+    pkgs.nu_scripts
+  ];
   programs.nushell = {
 
   enable = true;
@@ -72,11 +77,17 @@ export def ns [
     cat = "bat";
     ecc = "emacsclient -c";
   };
+
+  plugins = [
+    pkgs.nushellPlugins.query
+  ];
 };
 
 
 programs.starship = {
   enable = true;
+
+    enableFishIntegration = true;
 };
 
 

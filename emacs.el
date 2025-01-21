@@ -4,9 +4,10 @@
 (global-display-line-numbers-mode 1)
 
 
+
 (add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font"))
 
-(setq-default inhibit-splash-screen 1)
+(setq-default inhibit-startup-message nil)
 (setq shell-file-name "/bin/sh"
       explicit-shell-file-name "~/.nix-profile/bin/nu" )
 
@@ -14,18 +15,19 @@
 (setq scroll-step 1
       scroll-conservatively 10000)
 
+(use-package evil
+  :ensure t
+  :bind
+  (("M-n" . next-buffer)
+   ("M-p" . previous-buffer))
+  :init
+  (evil-mode 1))
 
-;;(use-package evil
-  ;;:ensure t
-;;  :init
-;;  (setq evil-want-keybinding nil)
-;;  :config
-;;  (evil-mode 1))
-;;(use-package evil-collection
-;;  :ensure 
-;;  :after evil
-;;  :config
-;;  (evil-collection-init))
+(use-package evil-collection
+  :ensure t
+  :init
+  (setq evil-want-keyinding nil)
+  (evil-collection-init))
 
 
 (use-package catppuccin-theme
@@ -35,15 +37,20 @@
   (load-theme 'catppuccin :no-confirm))
 
 (use-package treesit-auto
-  :ensure t
-  :config)
+  :ensure t)
 
 (use-package nix-mode
   :ensure t
   :defer t)
 
+
+(use-package nushell-mode
+  :ensure t
+  :defer t)
 (use-package magit
   :ensure t
+  :bind (("C-c m s" . magit-status)
+	 ("C-c m l" . magit-log))
   :defer t)
 (use-package rust-mode
   :ensure t
@@ -60,10 +67,19 @@
 (use-package auctex
   :ensure t
   :defer t
+  :config
+;;  (add-to-list 'TeX-view-program-list '("Zathura" . zathura))
+  (setq TeX-source-correlate-mode t)
+  (setq TeX-view-program-selection '((output-pdf  "Zathura" )))
   :custom
   (TeX-electric-math (cons "$" "$"))
   )
 
+(use-package pdf-tools
+  :ensure t
+  :config
+;;  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+  )
 (use-package all-the-icons
   :ensure t
   )
@@ -83,6 +99,12 @@
 (use-package markdown-mode
   :ensure t
   :defer t)
+
+(use-package multiple-cursors
+  :ensure t
+  :bind
+  (("C-S-c C-S-s" . mc/edit-lines  )))
+
 
 (use-package vterm
   :ensure t
@@ -105,6 +127,10 @@
   (counsel-mode 1))
 
 
+(use-package company
+  :ensure t
+  )
+
 (use-package projectile
   :ensure t
   :config
@@ -113,6 +139,17 @@
   )
 
 
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
+
+(use-package smartparens
+  :ensure t  ;; install the package
+  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :config
+  ;; load default config
+  (require 'smartparens-config))
 
 
 
