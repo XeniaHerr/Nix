@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs,  inputs, ... }:
 
 let
-  nixvim = import (builtins.fetchGit {
-    url = "https://github.com/nix-community/nixvim";
-  });
+  #  nixvim = import (builtins.fetchGit {
+  #  url = "https://github.com/nix-community/nixvim";
+  # });
 
   # Wind2 = import ./Wind2/default.nix {inherit pkgs;};
 
@@ -42,9 +42,9 @@ in
 
 
   nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
-    }))
+      #(import (builtins.fetchTarball {
+    # url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
+    # }))
   ]
   ;
 
@@ -56,12 +56,12 @@ in
     ./fastfetch.nix
     ./i3.nix
     # For home-manager
-    nixvim.homeManagerModules.nixvim
-    <catppuccin/modules/home-manager>
+    #nixvim.homeManagerModules.nixvim
+    # <catppuccin/modules/home-manager>
     ./nixvim.nix
     ./btop.nix
     ./tmux.nix
-    ./Wind2/Wind.nix
+    # ./Wind2/Wind.nix
     #./emacs.nix 
     ./nushell.nix
     ./fish.nix
@@ -114,6 +114,21 @@ in
     #   echo "Hello, ${config.home.username}!"
     # '')
 
+    (pkgs.writeShellScriptBin "univpn" ''
+      #!/usr/bin/env bash
+
+      LOCAL_SESSION_KEY=$(${pkgs.bitwarden-cli}/bin/bw unlock --raw)
+
+      LOCAL_PASSWORD=$(bw get password VPN --session $LOCAL_SESSION_KEY)
+
+      LOCAL_TOTP=$(bw get totp VPN --session $LOCAL_SESSION_KEY)
+
+      bw lock
+
+      echo -e "$LOCAL_PASSWORD\n$LOCAL_TOTP" | sudo ${pkgs.openconnect}/bin/openconnect vpn-ac.urz.uni-heidelberg.de --protocol='anyconnect' --useragent='AnyConnect' --user='dd272' --passwd-on-stdin
+
+    '')
+
     pkgs.ghostscript
 
     pkgs.betterdiscord-installer
@@ -133,9 +148,12 @@ in
     pkgs.texlivePackages.graphviz
 
 
+    pkgs.wl-clipboard
+
+
     pkgs.man-pages
     pkgs.man-pages-posix
-    (pkgs.callPackage ./Wind2/default.nix {})
+    #(pkgs.callPackage ./Wind2/default.nix {})
 #    (pkgs.callPackage ./orkan/default.nix {}) # THis might also not be nececcary
     pkgs.direnv
     pkgs.flameshot
@@ -212,36 +230,36 @@ in
 
 
   # Wind test
-  xsession.windowManager.Wind.enable = true;
+  #xsession.windowManager.Wind.enable = true;
 
-  xsession.windowManager.Wind.config = {
-    WindowGap = 5;
+    #xsession.windowManager.Wind.config = {
+    # WindowGap = 5;
 
-    TopicNames = [ "This" "is" "a" "Test" ];
+    #  TopicNames = [ "This" "is" "a" "Test" ];
 
 
-    Keys = [
+    #  Keys = [
 
-      {
-        key = "p";
+    # {
+    #   key = "p";
 
-        argument = "dmenu_run";
+    #   argument = "dmenu_run";
 
-        modifiers = [ "Mod"];
+    #   modifiers = [ "Mod"];
 
-        action = "spawn";
-      }
+    #   action = "spawn";
+    # }
 
-      {key = "q";
+    # {key = "q";
 
-       action = "quit";
+    #  action = "quit";
 
-       modifiers = ["Mod" "Shift"];
+    #  modifiers = ["Mod" "Shift"];
 
-       argument = 10;
-      }
-    ];
-  };
+    #  argument = 10;
+    #  }
+    #  ];
+  # };
   
   programs.orkan.enable = true;
 

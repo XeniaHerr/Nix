@@ -1,6 +1,14 @@
 {config, pkgs, ...}:
 {
 
+
+  home.packages = with pkgs; [
+
+    hyprshot
+    hyprpicker
+
+  ];
+
   wayland.windowManager.hyprland = {
 
     enable = true;
@@ -30,6 +38,9 @@
         "$mod SHIFT, j, movewindow, d"
         "$mod SHIFT, k, movewindow, u"
         "$mod SHIFT, l, movewindow, r"
+
+        "$mod ALT SHIFT, Delete, exec, ${pkgs.hyprlock}/bin/hyprlock"
+        "$mod, Print, exec ,${pkgs.hyprshot}/bin/hyprshot -m region -o ~/Pictures/"
 
       ] ++ (
         builtins.concatLists (builtins.genList (
@@ -89,6 +100,11 @@
           };
 
 
+      windowrulev2 = [
+        "idleinhibit fullscreen, class:.*"
+      ];
+
+
           decoration = {
             rounding = 10;
 
@@ -145,4 +161,74 @@
        
         };
       };
+
+
+
+  programs.hyprlock = {
+    enable = true;
+
+    settings = {
+
+      general = {
+      disable_loading_bar = false;
+
+      hide_cursor = false;
+      };
+
+      auth = {
+        # "fingerprint:enabled" = true;
+      };
+
+      background = {
+        color = "rgba(0,0,0,1)";
+      };
+
+
+      label = {
+        monitor = "";
+        text = "Hello $USER";
+        color = "rgba(1.0,1.0,1.0,1.0)";
+      "font_size" = 25;
+        font_family = "Mononoki Nerd Font";
+
+        halign = "center";
+        valign = "center";
+        position = "0, 80";
+      };
+    };
+  };
+
+  services.hypridle = {
+    enable = true;
+
+    settings = {
+
+    general = {
+
+      lock_cmd = "pidof hyprlock || hyprlock";
+
+      before_sleep_cmd = "loginctl lock-session";
+
+      after_sleep_cmd = "hyprctl dispatch dpms on";
+
+
+    };
+
+      listener = [
+
+        {
+          timeout = 300;
+            on-timeout = "loginctl lock-session";
+        }
+
+        {
+          timeout = 1500;
+          on-timeout = "systemctl suspend";
+        }
+      ];
+    };
+  };
+
+
+
     }

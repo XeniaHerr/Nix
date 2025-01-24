@@ -6,7 +6,7 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    syntaxHighlighting.catppuccin.enable = true;
+    #    syntaxHighlighting.catppuccin.enable = true;
 
     shellAliases = { 
       ".." = "cd ..";
@@ -26,10 +26,10 @@
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" 
-      "ssh"
-      "zoxide"
-      "alias-finder" 
-      "direnv" ];
+        "ssh"
+        "zoxide"
+        "alias-finder" 
+        "direnv" ];
       theme = "robbyrussell";
     };
   };
@@ -46,15 +46,18 @@
 
   };
 
+
+  catppuccin.zsh-syntax-highlighting.enable = true;
+
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
 
     defaultOptions = [ "--ansi" "--border=double"];
   };
-#programs.eza.enable = true;
-#programs.eza.enableNushellIntegration = true;
-#programs.eza.enableZshIntegration = true;
+  #programs.eza.enable = true;
+  #programs.eza.enableNushellIntegration = true;
+  #programs.eza.enableZshIntegration = true;
 }
 
 

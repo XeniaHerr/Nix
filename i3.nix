@@ -1,4 +1,4 @@
-{configs, pkgs, ... }:
+{configs, pkgs,lib,  ... }:
 
 let 
   mod = "Mod4";
@@ -29,6 +29,19 @@ let
   base ="#1e1e2e";
   mantle ="#181825";
   crust ="#11111b";
+
+
+
+
+  genWorkspacekeyfirst = count: 
+  let 
+    wslist = lib.genList( x: toString x) count;
+    keylist = lib.map (x: "${mod}+" + x) wslist;
+  commandlist = lib.map (x: "move to workspace " + x) wslist;
+  combined = lib.zipLists keylist commandlist;
+  in
+    lib.listToAttrs (map ( {fst, snd}: { name = fst; value = snd;}) combined );
+
  in {
 xsession.windowManager.i3 = {
     enable = true;
@@ -50,16 +63,16 @@ xsession.windowManager.i3 = {
       keybindings = {
       "${mod}+p" = "exec dmenu_run";
      # "${mod}+Shift+p" = "exec ${pkgs.dmenu}/bin/dmenu_run";
-      "${mod}+Return" = "exec ${pkgs.kitty}/bin/kitty";
-      "${mod}+1" = "workspace 1";
-      "${mod}+2" = "workspace 2";
-      "${mod}+3" = "workspace 3";
-      "${mod}+4" = "workspace 4";
-      "${mod}+5" = "workspace 5";
-      "${mod}+6" = "workspace 6";
-      "${mod}+7" = "workspace 7";
-      "${mod}+8" = "workspace 8";
-      "${mod}+9" = "workspace 9";
+        #  "${mod}+Return" = "exec ${pkgs.kitty}/bin/kitty";
+        # "${mod}+1" = "workspace 1";
+        # "${mod}+2" = "workspace 2";
+        #"${mod}+3" = "workspace 3";
+        #  "${mod}+4" = "workspace 4";
+        # "${mod}+5" = "workspace 5";
+        # "${mod}+6" = "workspace 6";
+        # "${mod}+7" = "workspace 7";
+        # "${mod}+8" = "workspace 8";
+        # "${mod}+9" = "workspace 9";
 
 
       "${mod}+w" = "kill";
@@ -85,7 +98,7 @@ xsession.windowManager.i3 = {
 
       "${mod}+Shift+greater" = "move workspace to output right";
       "${mod}+Shift+less" = "move workspace to output left";
-      };
+      } // genWorkspacekeyfirst 9;
       fonts = {
         names = [ "Mononoki" ];
         size = 10.0;
