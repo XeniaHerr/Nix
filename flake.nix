@@ -6,6 +6,7 @@
   nixConfig = {
     experimental-features = [
       "flakes"
+      "nix-command"
     ];
 
   };
@@ -35,9 +36,9 @@
   };
 
 
-  outputs = { self, nixpkgs, home-manager, nixvim, catppuccin, flake-utils, ...}:
-    flake-utils.lib.eachDefaultSystem ( system: 
+  outputs = { self, nixpkgs, home-manager, nixvim, catppuccin, ...}: 
       let 
+        system = "x86_64-linux";
         pkgs = import nixpkgs {inherit system;};
       in 
         {
@@ -45,11 +46,13 @@
           "xenia" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
 
-            modules = [ ./home.nix
-              catppuccin.homeManagerModules.catppuccin 
-              nixvim.homeManagerModules.nixvim ];
+          modules = [ 
+            ./home.nix
+            catppuccin.homeManagerModules.catppuccin 
+            nixvim.homeManagerModules.nixvim 
+          ];
 
           };
         };
-      });
+    };
 }
