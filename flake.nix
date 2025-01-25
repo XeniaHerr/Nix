@@ -36,11 +36,15 @@
   };
 
 
-  outputs = { self, nixpkgs, home-manager, nixvim, catppuccin, ...}: 
+  outputs = { self, nixpkgs, home-manager, nixvim, catppuccin, flake-utils, ...}: 
       let 
         system = "x86_64-linux";
         pkgs = import nixpkgs {inherit system;};
       in 
+      flake-utils.lib.eachSystem [ system ] (system: rec {
+        legacyPackages = import nixpkgs { inherit system;};
+      })
+     //
         {
         homeConfigurations = {
           "xenia" = home-manager.lib.homeManagerConfiguration {
