@@ -1,4 +1,9 @@
 {config, pkgs, ...}:
+let
+  center_mon = "desc:Acer Technologies VG270U P TEHEE00A854F";
+  left_mon = "desc:Acer Technologies VG270 0x13704B20";
+  right_mon = "desc:Acer Technologies VG270 0x13703D9F";
+in
 {
 
 
@@ -183,6 +188,11 @@
         color = "rgba(0,0,0,1)";
       };
 
+      background = {
+        monitor = "";
+        path = "~/Pictures/Wallpapers/wallpaperflare.com_wallpaper(5).jpg";
+      };
+
 
       label = {
         monitor = "";
@@ -194,6 +204,22 @@
         halign = "center";
         valign = "center";
         position = "0, 80";
+      };
+
+
+      input-field = {
+        monitor = "";
+        size = "20%, 5%";
+        outline_thickness = 3;
+        inner_color = "rgba(0,0,0,0)";
+
+        outer_color = "rgba(33ccffee)";
+
+        placeholder_text = "<i>Input Passwd...</i>";
+        fade_on_empty = false;
+        halign = "center";
+        valign = "center";
+        position = "0, 0";
       };
     };
   };
@@ -229,6 +255,26 @@
     };
   };
 
+  services.hyprpaper = {
+
+    enable = true;
+
+    settings = {
+
+      preload = [
+        "~/Pictures/Wallpapers/wallpaperflare.com_wallpaper(1).jpg"
+        "~/Pictures/Wallpapers/wallpaperflare.com_wallpaper(3).jpg"
+        "~/Pictures/Wallpapers/violet_evergarden.jpg"
+      ];
+
+      wallpaper = [
+        "eDP-1, ~/Pictures/Wallpapers/wallpaperflare.com_wallpaper(1).jpg"
+        "${left_mon}, ~/Pictures/Wallpapers/wallpaperflare.com_wallpaper(3).jpg"
+        "${center_mon}, ~/Pictures/Wallpapers/violet_evergarden.jpg"
+      ];
+    };
+
+  };
 
 
     }

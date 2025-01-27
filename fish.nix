@@ -1,7 +1,7 @@
 {config, pkgs, ...}:
 {
   programs.fish =  {
-    enable = true;
+    enable = false;
 
     interactiveShellInit = ''
     set fish_greeting
