@@ -1,10 +1,14 @@
-{config, pkgs, ...}:
+{config, pkgs,lib,  ...}:
 let
   center_mon = "desc:Acer Technologies VG270U P TEHEE00A854F";
   left_mon = "desc:Acer Technologies VG270 0x13704B20";
   right_mon = "desc:Acer Technologies VG270 0x13703D9F";
 in
 {
+
+  config =  lib.mkIf ( config.host.desktop.enable && config.host.desktop.wayland.enable && config.host.desktop.windowManager == "Hyprland"){
+
+
 
 
   home.packages = with pkgs; [
@@ -68,7 +72,7 @@ in
             "$mod, mouse:273, resizewindow"
           ];
 
-      debug.disable_logs = false;
+      debug.disable_logs = true;
 
           exec-once = [ "eww open example" "eww open activatelinux"];
 
@@ -276,5 +280,6 @@ in
 
   };
 
+  };
 
     }

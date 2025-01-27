@@ -1,5 +1,11 @@
 {config, pkgs, lib,  ...}: {
 
+
+  options = {
+    host.applications.ranger.enable = lib.mkEnableOption "ranger";
+  };
+  config = lib.mkIf config.host.applications.ranger.enable {
+
   programs.ranger = {
     enable = true;
 
@@ -20,5 +26,6 @@
     extraConfig = ''
       default_linemode devicons
     '';
+  };
   };
 }

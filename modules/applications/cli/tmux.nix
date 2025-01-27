@@ -1,6 +1,10 @@
-{configs, pkgs, ...}:
+{config, pkgs,lib, ...}:
 {
 
+
+  options.host.applications.tmux.enable = lib.mkEnableOption "tmux";
+
+  config = lib.mkIf config.host.applications.tmux.enable {
   programs.tmux = {
     enable = true;
     shell = "${pkgs.nushell}/bin/nu";
@@ -56,4 +60,5 @@
      ];
 
    };
+  };
  }

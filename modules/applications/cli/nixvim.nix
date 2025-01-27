@@ -1,4 +1,4 @@
-{configs, pkgs, ...}:
+{config, pkgs,lib, ...}:
 
 let 
   nu-grammar = pkgs.tree-sitter.buildGrammar {
@@ -13,10 +13,12 @@ let
   };
 
 in
-
-
   {
 
+
+  options.host.applications.nvim.enable = lib.mkEnableOption "neovim";
+
+  config = lib.mkIf config.host.applications.nvim.enable {
     programs.nixvim = {
 
 
@@ -478,18 +480,18 @@ in
         
            };
 
-    autoCmd = [
-      { event = "FileType";
-        pattern = [ "*.md" "markdown"];
-        callback = {
-      __raw = ''
-        function() 
-          print("Enter markdown")
-          vim.keymap.set("n", "<leader>cc", "<cmd>Telekasten toggle_todo<CR>", "{ buffer = true}") end
-      '';
-        };
-      }
-    ];
+      # autoCmd = [
+      # { event = "FileType";
+      #   pattern = [ "*.md" "markdown"];
+      #  callback = {
+    #__raw = ''
+            #    function() 
+    #print("Enter markdown")
+  #      vim.keymap.set("n", "<leader>cc", "<cmd>Telekasten toggle_todo<CR>", "{ buffer = true}") end
+            #    '';
+      #  };
+      # }
+      # ];
 
 
            extraConfigLua = ''
@@ -633,6 +635,7 @@ action = "<cmd>lua if require\"luasnip\".choice_active() then require\"luasnip\"
       }
   ];
 
+};
 };
 }
 

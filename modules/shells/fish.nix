@@ -1,5 +1,11 @@
-{config, pkgs, ...}:
+{config, pkgs,lib, ...}:
+
+
 {
+
+  options.host.shell.fish.enable = lib.mkEnableOption "fish";
+
+  config = lib.mkIf (config.host.settings.shell == "fish" || config.host.shell.fish.enable) {
   programs.fish =  {
     enable = false;
 
@@ -14,5 +20,6 @@
     starship init fish | source
     '';
 
+  };
   };
 }

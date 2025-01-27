@@ -1,6 +1,9 @@
-{configs, pkgs, ... }: {
+{config, pkgs,lib, ... }: {
 
 
+  options.host.shells.zsh.enable = lib.mkEnableOption "zsh";
+
+  config = lib.mkIf (config.host.settings.shell == "zsh" || config.host.shells.zsh.enable) {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -34,6 +37,7 @@
     };
   };
 
+    #TODO: Make these sepereate nix files
   programs.zoxide = {
 
     enable = true;
@@ -49,6 +53,9 @@
 
   catppuccin.zsh-syntax-highlighting.enable = true;
 
+
+  host.applications.util.starship.enable = true;
+
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
@@ -58,6 +65,7 @@
   #programs.eza.enable = true;
   #programs.eza.enableNushellIntegration = true;
   #programs.eza.enableZshIntegration = true;
+};
 }
 
 

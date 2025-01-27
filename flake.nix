@@ -51,10 +51,15 @@
             inherit pkgs;
 
           modules = [ 
-            ./home.nix
+             (import ./home/xenia.nix)
+            (import ./modules)
             catppuccin.homeManagerModules.catppuccin 
             nixvim.homeManagerModules.nixvim 
           ];
+
+          extraSpecialArgs = {
+            windowManager = "Hyprland";
+          };
 
           };
         };

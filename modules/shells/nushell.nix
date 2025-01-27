@@ -1,8 +1,11 @@
-
-{config, pkgs, ...}: 
+{config, pkgs,lib, ...}: 
 
 {
 
+
+  options.host.shells.nushell.enable = lib.mkEnableOption "nushell";
+
+  config = lib.mkIf (config.host.settings.shell == "nushell" || config.host.shells.nushell.enable) {
 
   home.packages = [
     pkgs.nushell
@@ -97,5 +100,6 @@ programs.carapace = {
   enableNushellIntegration = true;
 
 };
+  };
 
 }
