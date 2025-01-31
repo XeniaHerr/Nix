@@ -36,8 +36,9 @@
   };
 
 
-  outputs = { self, nixpkgs, home-manager, nixvim, catppuccin, flake-utils, ...}: 
+  outputs =  inputs @ { self, nixpkgs, home-manager, catppuccin, flake-utils, ...}: 
       let 
+      inherit (self) outputs;
         system = "x86_64-linux";
         pkgs = import nixpkgs {inherit system;};
       in 
@@ -54,11 +55,12 @@
              (import ./home/xenia.nix)
             (import ./modules)
             catppuccin.homeManagerModules.catppuccin 
-            nixvim.homeManagerModules.nixvim 
+            #  inputs.nixvim.homeManagerModules.nixvim 
           ];
 
           extraSpecialArgs = {
-            windowManager = "Hyprland";
+            mywindowManager = "Hyprland";
+            inherit inputs outputs;
           };
 
           };

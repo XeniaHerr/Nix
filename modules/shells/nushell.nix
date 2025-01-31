@@ -79,7 +79,8 @@ export def ns [
 
     cat = "bat";
     ecc = "emacsclient -c";
-  };
+      } //
+        lib.optionalAttrs (config.host.shells.aliases.enable) config.host.shells.aliases.aliases;
 
   plugins = [
     pkgs.nushellPlugins.query

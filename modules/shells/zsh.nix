@@ -11,12 +11,13 @@
     syntaxHighlighting.enable = true;
     #    syntaxHighlighting.catppuccin.enable = true;
 
-    shellAliases = { 
+      shellAliases =
+        lib.optionalAttrs (config.host.shells.aliases.enable) config.host.shells.aliases.aliases // { 
       ".." = "cd ..";
       la = "ls -Ahl";
       ff = "fastfetch";
-      du = "du -h";
-    };
+      du = "${pkgs.dust}/bin/dust";
+      };
 
     initExtra = ''
     bindkey '^ ' autosuggest-accept

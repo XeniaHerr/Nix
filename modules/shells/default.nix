@@ -14,4 +14,5 @@
     ./zsh.nix
     ./fish.nix
     ./nushell.nix
+    ./aliases.nix
   ];}

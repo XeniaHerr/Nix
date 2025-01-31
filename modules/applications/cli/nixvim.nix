@@ -1,4 +1,4 @@
-{config, pkgs,lib, ...}:
+{config, pkgs,lib, inputs, ...}:
 
 let 
   nu-grammar = pkgs.tree-sitter.buildGrammar {
@@ -15,10 +15,15 @@ let
 in
   {
 
+    imports = [
+  inputs.nixvim.homeManagerModules.nixvim 
+
+  ];
 
   options.host.applications.nvim.enable = lib.mkEnableOption "neovim";
 
   config = lib.mkIf config.host.applications.nvim.enable {
+
     programs.nixvim = {
 
 

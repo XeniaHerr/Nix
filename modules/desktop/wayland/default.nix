@@ -1,5 +1,8 @@
-{config, pkgs, lib, ...} @ args:
+{config, pkgs, lib, specialArgs, ...} @ args:
 
+let 
+  inherit (specialArgs) mywindowManager;
+in
 {
 
       imports = [

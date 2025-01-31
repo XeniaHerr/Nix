@@ -1,9 +1,10 @@
-{ config, pkgs,  inputs, windowManager, lib,  ... }:
+{ config, pkgs,  inputs, specialArgs, lib,  ... }:
 
 let
   
 
    tex = pkgs.texlive.withPackages (p: with p; [ scheme-full minted listing graphviz]); 
+  inherit (specialArgs) mywindowManager;
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -130,14 +131,24 @@ in
 
     settings.shell = "zsh";
 
+    shells.aliases.enable = true;
+    shells.aliases.aliases = {
+      lll = "ls -ahl";
+      lg = "lazygit";
+      mytest = "echo Hello World";
+    };
+
+
     features.development.enable = true;
 
-    desktop.wayland.enable = if windowManager == "Hyprland" then lib.mkDefault true else lib.mkDefault false; 
+    desktop.wayland.enable = if mywindowManager == "Hyprland" then lib.mkDefault true else lib.mkDefault false; 
     desktop.enable = true;
 
     applications.kitty.enable = true;
     applications.btop.enable = true;
     applications.fastfetch.enable = true;
+
+    shells.nushell.enable = true;
   };
 
 
