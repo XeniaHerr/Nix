@@ -51,6 +51,10 @@ in
         "$mod ALT SHIFT, Delete, exec, ${pkgs.hyprlock}/bin/hyprlock"
         "$mod, Print, exec ,${pkgs.hyprshot}/bin/hyprshot -m region -o ~/Pictures/"
 
+
+          "$mod, s, togglespecialworkspace"
+          "$mod SHIFT, s, movetoworkspace, special"
+
       ] ++ (
         builtins.concatLists (builtins.genList (
           x: let
@@ -74,11 +78,14 @@ in
 
       debug.disable_logs = true;
 
-          exec-once = [ "eww open example" "eww open activatelinux"];
+          exec-once = [ "[[ -z $(pidof eww) ]] || eww open example" "[[ -z $(pidof eww) ]] || eww open activatelinux"];
 
+        #TODO: Hyprland doesn't support adding reserved space via monitor descriptions. This might be a good thing to implement and make a merge request Also the order in which hyprctl display the reserved space differs from the 
           monitor = [
             "desc:Acer Technologies VG270 0x13704B20, preferred, 1200x0, 1, transform, 1"
             "desc:Acer Technologies VG270U P TEHEE00A854F, preferred, 2280x0, 1"
+            "desc:Acer Technologies VG270U P TEHEE00A854F, addreserved, 20, 0, 0, 0"
+          #"eDP-1, addreserved, 0, 0, 0, 0"
             "desc:Acer Technologies VG270 0x13703D9F, preferred, 4840x0, 1"
             "desc:Optoma Corporation Optoma 1080P, preferred, auto, 1, mirror, eDP-1"
             "desc:BOE 0x0B66, 1920x1200@60, auto, 1"
@@ -104,7 +111,7 @@ in
           general = {
             border_size = 2;
             gaps_in = 5;
-            gaps_out = 20;
+            gaps_out = 5;
             layout = "dwindle";
           };
 
@@ -112,6 +119,7 @@ in
       windowrulev2 = [
         "idleinhibit fullscreen, class:.*"
       ];
+
 
 
           decoration = {
@@ -214,7 +222,7 @@ in
       input-field = {
         monitor = "";
         size = "20%, 5%";
-        outline_thickness = 3;
+        outline_thickness = 2;
         inner_color = "rgba(0,0,0,0)";
 
         outer_color = "rgba(33ccffee)";

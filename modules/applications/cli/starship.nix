@@ -17,7 +17,7 @@
       settings = {
       add_newline = true;
 
-      format = "$directory$git_branch$git_commit$git_state$git_status$nix_shell$direnv$sudo\n$character";
+      format = "$directory$git_branch$git_commit$git_state$git_status$nix_shell$direnv$sudo$cmd_duration\n$character";
 
         character = {
           success_symbol = "[❯](bold green) ";
