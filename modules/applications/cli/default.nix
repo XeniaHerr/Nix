@@ -11,5 +11,6 @@
     ./nixvim.nix
     ./tmux.nix
     ./starship.nix
+    ./fzf.nix
   ];
 }

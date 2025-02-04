@@ -25,7 +25,7 @@
     zstyle ':omz:plugins:alias-finder' longer yes # disabled by default
     zstyle ':omz:plugins:alias-finder' exact yes # disabled by default
     zstyle ':omz:plugins:alias-finder' cheaper yes # disabled by default
-    '';
+'';
 
     oh-my-zsh = {
       enable = true;
@@ -57,11 +57,13 @@
 
   host.applications.util.starship.enable = true;
 
+    host.applications.fzf.enable = true;
+
   programs.fzf = {
-    enable = true;
+      #    enable = true;
     enableZshIntegration = true;
 
-    defaultOptions = [ "--ansi" "--border=double"];
+      #defaultOptions = [ "--ansi" "--border=double"];
   };
   #programs.eza.enable = true;
   #programs.eza.enableNushellIntegration = true;
