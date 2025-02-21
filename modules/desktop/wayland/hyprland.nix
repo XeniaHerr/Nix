@@ -1,4 +1,4 @@
-{config, pkgs,lib,  ...}:
+{config, pkgs,lib, inputs, ...}:
 let
   center_mon = "desc:Acer Technologies VG270U P TEHEE00A854F";
   left_mon = "desc:Acer Technologies VG270 0x13704B20";
@@ -78,7 +78,7 @@ in
 
       debug.disable_logs = true;
 
-          exec-once = [ "[[ -z $(pidof eww) ]] || eww open example" "[[ -z $(pidof eww) ]] || eww open activatelinux"];
+          exec-once = [ "${pkgs.eww}/bin/eww open example" "${pkgs.eww}/bin/eww open activatelinux"];
 
         #TODO: Hyprland doesn't support adding reserved space via monitor descriptions. This might be a good thing to implement and make a merge request Also the order in which hyprctl display the reserved space differs from the 
           monitor = [
@@ -101,6 +101,12 @@ in
               tap-to-click = false;
             };
           };
+
+        gestures = {
+          workspace_swipe = true;
+          workspace_swipe_fingers = 3;
+
+        };
 
          # device = {
 
@@ -175,8 +181,24 @@ in
 
 
           };
+
+                plugin = {
+           hyprexpo = {
+            columns = 3;
+            gap_size = 5;
+            workspace_method = "center current";
+            enable_gesture = true;
+            gesture_fingers = 3;
+            gesture_positive = true;
+         };
+         };
        
         };
+
+       plugins = with pkgs; [
+        hyprlandPlugins.hyprexpo
+        #  inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+       ];
       };
 
 

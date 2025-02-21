@@ -33,12 +33,19 @@
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
+
+
+    #    hyprland.url = "github:hyprwm/Hyprland";
+    #  hyprland.inputs.nixpkgs.follows = "nixpkgs";
+    # hyprland-plugins = {
+    #  url = "github:hyprwm/hyprland-plugins";
+    #  inputs.hyprland.follows = "hyprland";
+    # };
   };
 
 
   outputs =  inputs @ { self, nixpkgs, home-manager, catppuccin, flake-utils, ...}: 
       let 
-      inherit (self) outputs;
         system = "x86_64-linux";
         pkgs = import nixpkgs {inherit system;};
       in 
@@ -55,12 +62,11 @@
              (import ./home/xenia.nix)
             (import ./modules)
             catppuccin.homeManagerModules.catppuccin 
-            #  inputs.nixvim.homeManagerModules.nixvim 
           ];
 
           extraSpecialArgs = {
             mywindowManager = "Hyprland";
-            inherit inputs outputs;
+            inherit inputs;
           };
 
           };

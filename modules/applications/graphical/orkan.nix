@@ -27,8 +27,7 @@ rustPlatform.buildRustPackage rec {
   #  export LD_LIBRARY_PATH=${lib.makeLibraryPath [ libxkbcommon fontconfig ]};
   #  cargo build --release
   # '';
-
-  cargoHash = "sha256-IkUDjb46aE3NQmYYaohMxZEnMQaQSyA0sdbKNziilC0=";
+  cargoHash = "sha256-OwAhiygGZz2y6Y/dyXY32zqRhox5Rio6+qbDznalaYc=";
 
   meta = {
     description = "Wayland Programm launcher and Selector similar to dmenu";
