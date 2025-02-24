@@ -191,12 +191,20 @@ in
             gesture_fingers = 3;
             gesture_positive = true;
          };
+
+          overview = {
+            autoScroll = true;
+
+            exitonSwitch = true;
+
+          };
          };
        
         };
 
-       plugins = with pkgs; [
-        hyprlandPlugins.hyprexpo
+       plugins = with pkgs.hyprlandPlugins; [
+        #  hyprexpo
+        hyprspace
         #  inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
        ];
       };

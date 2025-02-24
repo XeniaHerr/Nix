@@ -35,6 +35,12 @@
     };
 
 
+    nix-colors = {
+      url = "github:Misterio77/nix-colors";
+    };
+
+
+
     #    hyprland.url = "github:hyprwm/Hyprland";
     #  hyprland.inputs.nixpkgs.follows = "nixpkgs";
     # hyprland-plugins = {
@@ -66,6 +72,7 @@
 
           extraSpecialArgs = {
             mywindowManager = "Hyprland";
+            myscheme = "catppuccin-mocha";
             inherit inputs;
           };
 

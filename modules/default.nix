@@ -7,6 +7,7 @@
     ./applications
     ./desktop
     ./dev
+    ./theming
 
   ];
 
