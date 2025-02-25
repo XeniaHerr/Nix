@@ -39,6 +39,16 @@
       url = "github:Misterio77/nix-colors";
     };
 
+    base16 = {
+      url = "github:SenchoPens/base16.nix";
+    };
+
+    tt-schemes = {
+      url = "github:tinted-theming/schemes";
+      flake = false;
+    };
+
+
 
 
     #    hyprland.url = "github:hyprwm/Hyprland";
@@ -72,7 +82,7 @@
 
           extraSpecialArgs = {
             mywindowManager = "Hyprland";
-            myscheme = "catppuccin-mocha";
+            myscheme = "nord";
             inherit inputs;
           };
 

@@ -4,6 +4,9 @@ with lib;
 
   imports = [
     inputs.nix-colors.homeManagerModules.default
+    inputs.base16.homeManagerModule {
+      scheme = "${inputs.tt-schemes}/base24/nord.yaml";
+    }
   ];
 
   options = {
@@ -21,9 +24,9 @@ with lib;
   };
 
 
-  config  = mkIf host.features.theming.enable {
+  config  = mkIf config.host.features.theming.enable {
 
-    colorScheme = inputs.nix-colors."${host.featurs.theming.scheme}";
+    colorScheme = inputs.nix-colors.colorSchemes."${config.host.features.theming.scheme}";
 
   };
 

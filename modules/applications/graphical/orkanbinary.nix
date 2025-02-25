@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/XeniaHerr/Orkan/releases/download/v0.1.1/Orkan";
-    hash = "sha256-818IajCsL/7EgcgzoyOmHiHyJemyf5RIgZtoXSbDM1M=";
+    hash = "sha256-DPENI7nU5aYX3Wrjj40Z0heXF5GUK0XD26m0543XXcw=";
   };
 
   phases = [ "installPhase" "patchPhase"];

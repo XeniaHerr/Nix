@@ -15,6 +15,7 @@ in
 
     hyprshot
     hyprpicker
+      jq
 
   ];
 
@@ -54,6 +55,8 @@ in
 
           "$mod, s, togglespecialworkspace"
           "$mod SHIFT, s, movetoworkspace, special"
+
+          "$mod SHIFT, r, exec, eww update activeworkspacename=\"$(hyprctl activeworkspace -j | ${pkgs.jq} -r '.name')\"; eww open renamer"
 
       ] ++ (
         builtins.concatLists (builtins.genList (

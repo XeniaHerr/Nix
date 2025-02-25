@@ -141,6 +141,10 @@ in
 
     features.development.enable = true;
 
+    features.theming.enable = true;
+
+    features.theming.scheme = "catppuccin-mocha";
+
     desktop.wayland.enable = if mywindowManager == "Hyprland" then lib.mkDefault true else lib.mkDefault false; 
     desktop.enable = true;
 
