@@ -11,7 +11,7 @@ in
       enable = lib.mkEnableOption "orkan";
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.callPackage ./orkan.nix {};
+        default = pkgs.callPackage ./orkanbinary.nix {};
       };
 
     };
