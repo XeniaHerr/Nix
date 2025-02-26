@@ -100,7 +100,6 @@ in
     bitwarden
     bitwarden-cli
     wpa_supplicant_gui
-    #texlive.combined.scheme-full
     tex
     texlivePackages.graphviz
 
@@ -114,9 +113,6 @@ in
     youtube-music
     cliphist
     socat
-    #gh
-    #ranger
-    #dmenu_patched
     goldwarden
     bat
     dust
@@ -141,9 +137,9 @@ in
 
     features.development.enable = true;
 
-    features.theming.enable = true;
+    #    features.theming.enable = true;
 
-    features.theming.scheme = "catppuccin-mocha";
+    #features.theming.scheme = "catppuccin-mocha";
 
     desktop.wayland.enable = if mywindowManager == "Hyprland" then lib.mkDefault true else lib.mkDefault false; 
     desktop.enable = true;
@@ -151,6 +147,7 @@ in
     applications.kitty.enable = true;
     applications.btop.enable = true;
     applications.fastfetch.enable = true;
+    applications.zathura.enable = true;
 
     shells.nushell.enable = true;
   };

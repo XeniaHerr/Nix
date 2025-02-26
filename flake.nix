@@ -34,17 +34,27 @@
       url = "github:numtide/flake-utils";
     };
 
-
-    nix-colors = {
-      url = "github:Misterio77/nix-colors";
-    };
-
     base16 = {
       url = "github:SenchoPens/base16.nix";
     };
 
     tt-schemes = {
       url = "github:tinted-theming/schemes";
+      flake = false;
+    };
+
+    base16-nvim = {
+      url = "github:tinted-theming/tinted-vim";
+      flake = false;
+    };
+
+    base16-zathura = {
+      url = "github:haozeke/base16-zathura";
+      flake = false;
+    };
+
+    base16-kitty = {
+      url = "github:kdrag0n/base16-kitty";
       flake = false;
     };
 
@@ -82,7 +92,7 @@
 
           extraSpecialArgs = {
             mywindowManager = "Hyprland";
-            myscheme = "nord";
+            myscheme = "catppuccin-mocha";
             inherit inputs;
           };
 

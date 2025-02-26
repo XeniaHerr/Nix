@@ -18,19 +18,51 @@
         "type": "github"
       }
     },
-    "base16-schemes": {
+    "base16-kitty": {
       "flake": false,
       "locked": {
-        "lastModified": 1696158499,
-        "narHash": "sha256-5yIHgDTPjoX/3oDEfLSQ0eJZdFL1SaCfb9d6M0RmOTM=",
+        "lastModified": 1721117198,
+        "narHash": "sha256-+vEXvEsar7w7wPVRmKx+rJKUTD5DBgLR7jfl0k7VhnE=",
+        "owner": "kdrag0n",
+        "repo": "base16-kitty",
+        "rev": "0898f2677f3a583cc6a89bde29b2b05ac2041e0b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kdrag0n",
+        "repo": "base16-kitty",
+        "type": "github"
+      }
+    },
+    "base16-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1740359818,
+        "narHash": "sha256-Tbjclt9SnCMj+9Szk9M+xWZ6gbo14ylVT+YBvuzFadg=",
         "owner": "tinted-theming",
-        "repo": "base16-schemes",
-        "rev": "a9112eaae86d9dd8ee6bb9445b664fba2f94037a",
+        "repo": "tinted-vim",
+        "rev": "4dcc9a77d7aa19c063f0df00865ef60b7e99c8bd",
         "type": "github"
       },
       "original": {
         "owner": "tinted-theming",
-        "repo": "base16-schemes",
+        "repo": "tinted-vim",
+        "type": "github"
+      }
+    },
+    "base16-zathura": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1643130739,
+        "narHash": "sha256-nVJoygnytYN40VHXpAFwO7ruVbaSydeR547MU45VSuY=",
+        "owner": "haozeke",
+        "repo": "base16-zathura",
+        "rev": "9f148b4001dc67d399e645919225943d47e50125",
+        "type": "github"
+      },
+      "original": {
+        "owner": "haozeke",
+        "repo": "base16-zathura",
         "type": "github"
       }
     },
@@ -173,25 +205,6 @@
         "type": "github"
       }
     },
-    "nix-colors": {
-      "inputs": {
-        "base16-schemes": "base16-schemes",
-        "nixpkgs-lib": "nixpkgs-lib"
-      },
-      "locked": {
-        "lastModified": 1707825078,
-        "narHash": "sha256-hTfge2J2W+42SZ7VHXkf4kjU+qzFqPeC9k66jAUBMHk=",
-        "owner": "Misterio77",
-        "repo": "nix-colors",
-        "rev": "b01f024090d2c4fc3152cd0cf12027a7b8453ba1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Misterio77",
-        "repo": "nix-colors",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1736012469,
@@ -205,21 +218,6 @@
         "owner": "NixOS",
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-lib": {
-      "locked": {
-        "lastModified": 1697935651,
-        "narHash": "sha256-qOfWjQ2JQSQL15KLh6D7xQhx0qgZlYZTYlcEiRuAMMw=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "e1e11fdbb01113d85c7f41cada9d2847660e3902",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
         "type": "github"
       }
     },
@@ -286,10 +284,12 @@
     "root": {
       "inputs": {
         "base16": "base16",
+        "base16-kitty": "base16-kitty",
+        "base16-nvim": "base16-nvim",
+        "base16-zathura": "base16-zathura",
         "catppuccin": "catppuccin",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
-        "nix-colors": "nix-colors",
         "nixpkgs": "nixpkgs_2",
         "nixvim": "nixvim",
         "tt-schemes": "tt-schemes"

@@ -1,4 +1,6 @@
-{ config, pkgs,lib, ... }: {
+{ config, pkgs,lib, inputs, ... }: 
+with lib;
+{
 
 
   options = {
@@ -18,6 +20,8 @@ config = lib.mkIf config.host.applications.kitty.enable {
     };
 
       themeFile = "Catppuccin-Mocha";
+
+      extraConfig = config.scheme inputs.base16-kitty;
 /*
       settings = {
 

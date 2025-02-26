@@ -5,6 +5,7 @@
   imports = [
   ./kitty.nix
     ./orkanmodule.nix
+    ./zathura.nix
 
   ];
 }

@@ -38,18 +38,18 @@ in
       globals = {
         mapleader = " ";
       };
-
-
        colorschemes = {
+/*
 
           catppuccin = {
           enable = true;
           settings.flavour = "mocha";
           };
+*/
 
         base16 = {
           #   enable = true;
-          colorscheme = {
+         /* colorscheme = {
         base00 = "#${config.colorScheme.palette.base00}";
         base01 = "#${config.colorScheme.palette.base01}";
         base02 = "#${config.colorScheme.palette.base02}";
@@ -67,6 +67,8 @@ in
         base0E = "#${config.colorScheme.palette.base0E}";
         base0F = "#${config.colorScheme.palette.base0F}";
         };
+*/
+          colorscheme = "catppuccin-mocha";
           settings = {
             telescope_borders = true;
             ts_rainbow = true;
@@ -507,6 +509,13 @@ in
       vim-obsession
       tabular
       vim-visual-multi
+      (base16-vim.overrideAttrs ( old:
+          let 
+            scheme-file = config.scheme {  target = "tinted-vim";
+              templateRepo = "${inputs.base16-nvim}";
+              check-parsed-config-yaml = false;
+            use-ifd = false;};
+          in {patchPhase = ''cp ${scheme-file} colors/base16-customscheme.vim'';}))
     ];
 
            opts = {
@@ -530,7 +539,10 @@ in
       # ];
 
 
-           extraConfigLua = ''
+      extraConfigLua = ''
+            -- tinted-nvim colorscheme
+            vim.g.tinted_colorspace = 256
+            vim.cmd.colorscheme('base16-customscheme')
 
              -- Vimtex config
 

@@ -1,14 +1,19 @@
-{inputs,lib, config, ...}:
+{inputs,lib, config,specialArgs, ...}:
 with lib;
+let
+  inherit (specialArgs) myscheme;
+in
 {
 
   imports = [
-    inputs.nix-colors.homeManagerModules.default
+    #    inputs.nix-colors.homeManagerModules.default
     inputs.base16.homeManagerModule {
-      scheme = "${inputs.tt-schemes}/base24/nord.yaml";
+      scheme =  { yaml = "${inputs.tt-schemes}/base24/${myscheme}.yaml";
+        use-ifd = "auto";
+      };
     }
   ];
-
+/*
   options = {
 
     host.features.theming.enable = mkEnableOption "Colorscheme support";
@@ -30,5 +35,6 @@ with lib;
 
   };
 
+  */
 
 }
