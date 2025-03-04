@@ -148,6 +148,14 @@ in
     applications.btop.enable = true;
     applications.fastfetch.enable = true;
     applications.zathura.enable = true;
+    applications.iamb.enable = true;
+
+    applications.iamb.profiles = [
+      {
+        name = "dd272";
+        domain = "matrix-im.uni-heidelberg.de";
+      }
+    ];
 
     shells.nushell.enable = true;
   };

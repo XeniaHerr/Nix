@@ -12,5 +12,6 @@
     ./tmux.nix
     ./starship.nix
     ./fzf.nix
+    ./iamb.nix
   ];
 }

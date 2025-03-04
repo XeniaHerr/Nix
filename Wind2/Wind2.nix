@@ -159,7 +159,7 @@ in
             default = "Mod4";
 
             description = ''
-            Set the Modifier once and reference it later with Mod
+G            Set the Modifier once and reference it later with Mod
             '';
           };
 
