@@ -1,7 +1,10 @@
-{config, pkgs, inputs, ...}:
+{config,lib,specialArgs,...}:
 
-  with pkgs.lib;
-{
+with lib;
+let
+  inherit (specialArgs) yubikey_id;
+in
+  {
 
 
   options = {
@@ -11,5 +14,10 @@
 
 
     };
+  };
+
+
+  config = mkIf config.host.features.security.enable {
+
   };
 }

@@ -1,6 +1,7 @@
 {pkgs, lib, config, ...}:
 with lib;
 let 
+  cfg = config.host.applications.iamb;
   profileReader = {name, domain, url}: ''
     [profiles."${domain}"]
     user_id = "@${name}:${domain}"
@@ -32,6 +33,13 @@ in
         };
       }));
     };
+
+
+    extraConfig = mkOption {
+      type = types.str;
+      description = "ExtraConfig to be appended at the end. Must be valid TOML";
+      default = "";
+    };
   };
 
 
@@ -41,6 +49,9 @@ in
 
     xdg.configFile."iamb/config.toml".source = pkgs.writeText "config.toml" ''
       ${builtins.concatStringsSep"\n\n" (builtins.map profileReader config.host.applications.iamb.profiles)}
+
+
+      ${cfg.extraConfig}
     '' ;
   };
 }

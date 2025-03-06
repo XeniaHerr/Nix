@@ -15,7 +15,7 @@
         lib.optionalAttrs (config.host.shells.aliases.enable) config.host.shells.aliases.aliases // { 
       ".." = "cd ..";
       la = "ls -Ahl";
-      ff = "fastfetch";
+      ff = "fastfetch -c examples/10.jsonc";
       du = "${pkgs.dust}/bin/dust";
       };
 

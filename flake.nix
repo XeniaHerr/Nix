@@ -60,7 +60,6 @@
 
 
 
-
     #    hyprland.url = "github:hyprwm/Hyprland";
     #  hyprland.inputs.nixpkgs.follows = "nixpkgs";
     # hyprland-plugins = {
@@ -71,21 +70,21 @@
 
 
   outputs =  inputs @ { self, nixpkgs, home-manager, catppuccin, flake-utils, ...}: 
-      let 
-        system = "x86_64-linux";
-        pkgs = import nixpkgs {inherit system;};
-      in 
+    let 
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {inherit system;};
+    in 
       flake-utils.lib.eachSystem [ system ] (system: rec {
         legacyPackages = import nixpkgs { inherit system;};
       })
-     //
-        {
-        homeConfigurations = {
-          "xenia" = home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
+    //
+    {
+      homeConfigurations = {
+        "xenia" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
 
           modules = [ 
-             (import ./home/xenia.nix)
+            (import ./home/xenia.nix)
             (import ./modules)
             catppuccin.homeManagerModules.catppuccin 
           ];
@@ -93,10 +92,11 @@
           extraSpecialArgs = {
             mywindowManager = "Hyprland";
             myscheme = "catppuccin-mocha";
+            yubikey_id = ["32244578"];
             inherit inputs;
           };
 
-          };
         };
+      };
     };
 }

@@ -39,7 +39,15 @@ in
   # release notes.
   home.stateVersion = "24.05"; # Please read the comment before changing.ty
 
-  gtk.enable = true;
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Tokyonight-Dark";
+      package = pkgs.tokyo-night-gtk;
+    };
+  };
+
+
 
 
   fonts.fontconfig.enable = true;
@@ -137,18 +145,26 @@ in
 
     features.development.enable = true;
 
+    #features.security.enable = true;
+
     #    features.theming.enable = true;
 
     #features.theming.scheme = "catppuccin-mocha";
 
     desktop.wayland.enable = if mywindowManager == "Hyprland" then lib.mkDefault true else lib.mkDefault false; 
     desktop.enable = true;
+    desktop.dunst = true;
+    desktop.waybar = true;
 
     applications.kitty.enable = true;
     applications.btop.enable = true;
     applications.fastfetch.enable = true;
     applications.zathura.enable = true;
     applications.iamb.enable = true;
+    applications.iamb.extraConfig = ''
+      [settings.users]
+      "@dd272:matrix-im.uni-heidelberg.de" = { "name" = "Kenneth Herr"}
+    '';
 
     applications.iamb.profiles = [
       {

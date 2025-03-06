@@ -8,6 +8,7 @@
     ./desktop
     ./dev
     ./theming
+    ./security
 
   ];
 

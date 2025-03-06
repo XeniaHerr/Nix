@@ -16,6 +16,7 @@ in
     hyprshot
     hyprpicker
       jq
+      hyprcursor
 
   ];
 
@@ -56,7 +57,7 @@ in
           "$mod, s, togglespecialworkspace"
           "$mod SHIFT, s, movetoworkspace, special"
 
-          "$mod SHIFT, r, exec, eww update activeworkspacename=\"$(hyprctl activeworkspace -j | ${pkgs.jq} -r '.name')\"; eww open renamer"
+          #"$mod SHIFT, r, exec, eww update activeworkspacename=\"$(hyprctl activeworkspace -j | ${pkgs.jq} -r '.name')\"; eww open renamer"
 
       ] ++ (
         builtins.concatLists (builtins.genList (
@@ -81,7 +82,13 @@ in
 
       debug.disable_logs = true;
 
-          exec-once = [ "${pkgs.eww}/bin/eww open example" "${pkgs.eww}/bin/eww open activatelinux"];
+        exec-once = [ #"${pkgs.eww}/bin/eww open example" 
+        "${pkgs.eww}/bin/eww open activatelinux"
+        ];
+        #++ lib.optionals config.host.desktop.dunst [
+        #    "${pkgs.dunst}"
+        #  ];
+
 
         #TODO: Hyprland doesn't support adding reserved space via monitor descriptions. This might be a good thing to implement and make a merge request Also the order in which hyprctl display the reserved space differs from the 
           monitor = [
@@ -211,7 +218,6 @@ in
         #  inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
        ];
       };
-
 
 
   programs.hyprlock = {

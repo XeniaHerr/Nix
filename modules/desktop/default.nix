@@ -13,5 +13,6 @@
   imports = [
     ./x11
     ./wayland
+    ./utils
   ];
 }

@@ -8,10 +8,11 @@
     ./ranger.nix
     ./fastfetch.nix
     ./git.nix
-    ./nixvim.nix
+    #    ./nixvim.nix
     ./tmux.nix
     ./starship.nix
     ./fzf.nix
     ./iamb.nix
+    ./nvim
   ];
 }

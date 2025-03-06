@@ -3,14 +3,15 @@
 let 
   inherit (specialArgs) mywindowManager;
 in
-{
+  {
 
-      imports = [
+  imports = [
 
-        ./hyprland.nix
+    ./hyprland.nix
+    ./waybar.nix
 
-        
-      ];
+
+  ];
   options = {
     host.desktop.wayland.enable = lib.mkEnableOption "Wayland";
 
@@ -29,5 +30,5 @@ in
 
 
 
-  };
+    };
 }
