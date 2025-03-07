@@ -1,5 +1,4 @@
 {inputs,lib, config,specialArgs, ...}:
-with lib;
 let
   inherit (specialArgs) myscheme;
 in

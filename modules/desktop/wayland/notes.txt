@@ -1,0 +1,17 @@
+Left:
+
+Nix Icon - Workspaces
+
+Tray (standing alone)
+
+Center:
+
+Current Window
+
+Right:
+
+cpu - Ram - Network (Monitors)
+
+Fully Right:
+
+language - volume - date

@@ -18,6 +18,11 @@ in
       jq
       hyprcursor
 
+      (pkgs.writeShellScriptBin "focusworkspacewith" ''
+        #!/usr/bin/env bash
+        hyprctl dispatch focusworkspaceoncurrentmonitor $(hyprctl clients -j | jq '.[] | select(.class == "$1") | .workspace.id')
+      '')
+
   ];
 
   wayland.windowManager.hyprland = {
@@ -34,6 +39,7 @@ in
         "$mod, w, killactive"
         "$mod, t, togglefloating, active"
         "$mod, p, pin, active"
+        "$mod, b, exec, kill -s USR1 $(pidof waybar)"
         "$mod SHIFT, Period, movewindow, mon:+1 silent"
         "$mod SHIFT, Comma, movewindow, mon:-1 silent"
         "$mod, Tab, focusworkspaceoncurrentmonitor, previous"

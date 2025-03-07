@@ -101,7 +101,8 @@ in
     eww
     ripgrep
     clang-tools
-    pavucontrol
+    pwvucontrol
+    pipewire
     gcc
     rustc
     bitwarden-desktop
@@ -127,6 +128,24 @@ in
     nodejs
     zathura
     manix
+
+
+    (writeShellScriptBin "storefind" ''
+      #!/usr/bin/env bash
+
+      F=$(which "$1")
+
+      if [ -z "$F" ]; then
+           echo "Not a binary";
+           exit 1;
+      fi
+
+      if [[ $F =~ ^/nix/store.* ]]; then
+          echo "$F"
+      else
+          file -b "$F" | awk '{ print $4 }'
+      fi
+    '')
   ];
 
 

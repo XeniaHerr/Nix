@@ -1,5 +1,5 @@
 {config, pkgs, lib,...}:
-  with lib;
+with lib;
 {
 
 
@@ -9,19 +9,61 @@
   config = mkIf config.host.desktop.waybar {
 
 
-    wayland.windowManager.hyprland.settings.exec-once = [ "${pkgs.waybar}"];
+    wayland.windowManager.hyprland.settings.exec-once = [ "${pkgs.waybar}/bin/waybar"];
     programs.waybar = {
       enable = true;
       settings = {
         mainBar = {
           layer = "top";
-          output = ["eDP-1" "DP-12"];
+          output = ["eDP-1" "Acer Technologies VG270U P TEHEE00A854F"];
           position = "top";
           height = 28;
-          modules-left = ["custom/nixos" "hyprland/workspaces"];
+          modules-left = ["custom/nixos" "hyprland/workspaces" "tray" ];
           modules-center = ["hyprland/window"];
-          modules-right = [ "hyprland/language" "cpu" "battery" "clock" "tray"];
+          modules-right = [ "cpu" "memory" "disk" "network" "hyprland/language" "backlight" "wireplumber" "idle_inhibitor" "battery" "clock"];
 
+          "group/light" = {
+
+            modules = [ "backlight" "backlight/slider"];
+
+            drawer = {
+              transition-duration = 500;
+              transition-left-to-right = false;
+              children-css = "light";
+
+            };
+          };
+
+          "backlight" = {
+            interval = 3;
+            format = "{icon} {percent}%";
+            format-icons = [ "󰹐 " "󱩎 " "󱩏 " "󱩐 " "󱩑 " "󱩒 " "󱩓 " "󱩔 " "󱩕 " "󱩖 " ];
+            tooltip = false;
+          };
+
+          "backlight/slider" = {
+            min = 0;
+            max = 255;
+            orientation = "horizontal";
+
+          };
+
+
+          "network" = {
+
+            interval = 30;
+
+            format-wifi = " ";
+
+            format-ethernet = "󰈀 ";
+
+            format-disconnected = "󰌙 ";
+
+            tooltip = true;
+            tooltip-format-wifi = "{essid}: {bandwidthUpBytes}/{bandwidthDownBytes}";
+            tooltip-format-ethernet = "{ifname}: {bandwidthUpBytes}/{bandwidthDownBytes}";
+
+          };
           "custom/nixos" = {
             format = " ";
             on-click = "hyprctl dispatch overview:toggle";
@@ -33,10 +75,34 @@
 
           "hyprland/window" = {
             rewrite = {
+              "nvim" = " eovim - the best Editor";
               "nvim (.*)" = "  - $1";
               "(.*)— Mozilla Firefox" = " - $1";
               "(.*)- Mozilla Thunderbird" = "  - $1";
+              "nix-shell -p (.*)" = "  +   { $1 }";
             };
+          };
+
+          "wireplumber" = {
+
+            format = "{icon} {volume}%";
+
+            format-icons = ["" " " " "];
+
+            on-click-right = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+
+
+            tooltip = true;
+            tooltip-format = "{node_name}: {volume}%";
+          };
+
+          "idle_inhibitor" = {
+            format = "{icon}";
+            format-icons = {
+              deactivated = " ";
+              activated = " ";
+            };
+
           };
 
           "cpu" = {
@@ -49,6 +115,26 @@
               moderate = 20;
             };
           };
+
+          "memory" = {
+            format = "  {percentage}%";
+            tooltip = true;
+            tooltip-format = "{used:0.1f}G/{total:0.1f}G";
+          };
+
+          "disk" = {
+            format = "󱛟 {percentage_used}%";
+            unit = "Gb";
+            tooltip = true;
+            tooltip-format = "{used}/{total}";
+            states = {
+              empty = 25;
+              halfway = 50;
+
+            };
+
+          };
+
 
           "tray" = {
             spacing = 5;
@@ -66,19 +152,19 @@
               on-click-right = "mode";
             };
             tooltip = true;
-            tooltop-format = "{:%Y-%m-%d}";
-          calendar = {
-            mode = "month";
-            weeks-pos = "left";
-            on-scroll = 1;
-          };
+            tooltip-format = "{:%Y-%m-%d}";
+            calendar = {
+              mode = "month";
+              weeks-pos = "left";
+              on-scroll = 1;
+            };
           };
 
           "battery" = {
-          states = {
-            warning = 30;
-            critical = 15;
-          };
+            states = {
+              warning = 30;
+              critical = 15;
+            };
             format = "{icon} {capacity}%";
             format-icons = [" "  " "  " "  " "  " "];
             max-length = 25;
@@ -120,6 +206,29 @@
         font-family: "Mononoki Nerd Font";
         }
 
+        .tooltip * {
+
+        background-color: @base01;
+        }
+
+        #cpu,
+        #wireplumber,
+        #clock,
+        #battery,
+        #idle_inhibitor,
+        #tray,
+        #disk,
+        #memory,
+        #light,
+        #network,
+        #backlight,
+        #backlight-slider,
+        #language {
+        padding-left: 6px;
+        margin-top: 2px;
+        background-color: @base01;
+        }
+
         window#waybar {
         background: transparent;
         margin: 5px;
@@ -127,9 +236,7 @@
 
         .modules-right {
         padding-left: 8px;
-        border-radius: 15px 0 0 15px;
         margin-top: 2px;
-        background-color: @base01;
         }
 
         .modules-center {
@@ -146,24 +253,26 @@
         padding-right: 8px;
         border-radius: 0 15px 15px 0;
         margin-top: 2px;
-        background-color: @base01;
+        transition-property: all;
+        transition-duration: 0.5s;
+        transition-timing-function: ease;
         }
 
         #workspaces {
         background-color: @base01;
-        margin: 2px;
+        padding-left: 4px;
 
-        border-radius: 4px;
+        border-radius: 0 15px 15px 0;
         }
 
         #workspaces button {
         padding: 0 4px;
         margin: 2px;
-        color: @base06;
+        color: @base03;
         }
 
         #workspaces button.empty {
-        color: @base06;
+        color: @base03;
         }
 
         #workspaces button.visible {
@@ -177,8 +286,37 @@
         color: @base0F;
         }
 
+
+
+        #idle_inhibitor.activated {
+        color: @base0D;
+        }
+
+        #idle_inhibitor.deactivated {
+        color: @base03;
+        }
+
+        #network {
+
+        border-radius: 0 15px 15px 0;
+        margin-right: 3em;
+        padding-right: 6px;
+        }
+
+        #network.disconnected {
+        color: @base03;
+        }
+
+        #network.wifi, #network.ethernet {
+        color: @base0D;
+        }
+
+
+        #disk {
+
+        }
         #cpu {
-        padding-left: 4px;
+        border-radius: 15px 0 0 15px;
         }
 
         #cpu.moderate{
@@ -202,24 +340,29 @@
 
         #tray {
         background-color: @base01;
-        padding-left: 4px;
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-left: 3em;
+
+        border-radius: 15px 15px 15px 15px;
 
         }
 
+        #language {
+        border-radius: 15px 0 0 15px;
+        }
 
         #custom-nixos {
         padding-left: 4px;
-        padding-right: 4px;
+        background-color: @base01;
         }
 
         #clock {
         background-color: @base01;
-        padding-left: 4px;
         }
 
         #battery {
         background-color: @base01;
-        padding-left: 4px;
         }
 
         #battery.warning {
@@ -238,6 +381,31 @@
         to {
         color: @base01;
         }
+        }
+
+
+
+        #backlight-slider {
+        padding-left: 6px;
+
+        }
+        #backlight-slider slider {
+        min-width: 0px;
+
+        }
+
+
+        #backlight-slider through {
+        min-width: 80px;
+        border-radius: 5px;
+        background-color: @base03;
+        min-height: 10px;
+        }
+
+        #backlight-slider highlight {
+        min-width: 10px;
+        border-radius: 5px;
+        background-color: @base13;
         }
     '';
 
