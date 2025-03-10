@@ -21,7 +21,8 @@ with lib;
       settings = {
         global = {
           origin = "top-right";
-          follow ="mouse"; # Not what i really want, but there is no real alternative...
+          #follow ="mouse"; # Not what i really want, but there is no real alternative...
+          monitor = "Acer Technologies VG270U P TEHEE00A854F";
 
           gap_size = 10;
           corner_radius = 5;

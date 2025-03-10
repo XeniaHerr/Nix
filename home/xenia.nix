@@ -94,17 +94,26 @@ in
 
     '')
 
+      (writeShellScriptBin "ns" ''
+      #!/usr/bin/env bash
+      if [[ -z "$1" || "$1" == "--help" ]]; then
+        echo "Usage: ns search_string"
+        exit 0
+      fi
+      nix search nixpkgs "$1" --json | ${jq}/bin/jq -c '.[] | {pname, description }' | ${jtbl}/bin/jtbl
+      '')
+
     ghostscript
 
     betterdiscord-installer
     discord
     eww
     ripgrep
-    clang-tools
+    #clang-tools
     pwvucontrol
     pipewire
-    gcc
-    rustc
+    #gcc
+    #rustc
     bitwarden-desktop
     bitwarden
     bitwarden-cli
@@ -112,8 +121,9 @@ in
     tex
     texlivePackages.graphviz
 
+    whatsie
 
-    wl-clipboard
+      #wl-clipboard
 
 
     man-pages
@@ -125,7 +135,6 @@ in
     goldwarden
     bat
     dust
-    nodejs
     zathura
     manix
 
@@ -143,7 +152,7 @@ in
       if [[ $F =~ ^/nix/store.* ]]; then
           echo "$F"
       else
-          file -b "$F" | awk '{ print $4 }'
+          ${file}/bin/file -b "$F" | awk '{ print $4 }'
       fi
     '')
   ];
@@ -185,12 +194,16 @@ in
       "@dd272:matrix-im.uni-heidelberg.de" = { "name" = "Kenneth Herr"}
     '';
 
-    applications.iamb.profiles = [
-      {
+    applications.iamb.profiles = {
+       "matrix-im.uni-heidelberg.de" = {
         name = "dd272";
-        domain = "matrix-im.uni-heidelberg.de";
-      }
-    ];
+         };
+
+      "example.com" = {
+        name = "@myname";
+        url = "homeserver.net";
+      };
+      };
 
     shells.nushell.enable = true;
   };

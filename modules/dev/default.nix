@@ -1,4 +1,4 @@
-{config, options, pkgs, lib, ...}:
+{config, pkgs, lib, ...}:
 
 # List of Applications that i need to develop
 {
@@ -32,6 +32,7 @@ options = {
       rustc
       cloc
       clang-tools
+      nodejs
     ];
   };
     

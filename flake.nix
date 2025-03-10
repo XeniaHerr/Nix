@@ -58,6 +58,11 @@
       flake = false;
     };
 
+    base16-rofi = {
+      url = "github:tinted-theming/base16-rofi";
+      flake = false;
+    };
+
 
 
     #    hyprland.url = "github:hyprwm/Hyprland";

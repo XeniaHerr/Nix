@@ -9,7 +9,6 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    #    syntaxHighlighting.catppuccin.enable = true;
 
       shellAliases =
         lib.optionalAttrs (config.host.shells.aliases.enable) config.host.shells.aliases.aliases // { 

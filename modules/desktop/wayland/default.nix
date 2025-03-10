@@ -9,11 +9,23 @@ in
 
     ./hyprland.nix
     ./waybar.nix
+    ./rofi.nix
+    ./kanshi.nix
 
 
   ];
   options = {
-    host.desktop.wayland.enable = lib.mkEnableOption "Wayland";
+    host.desktop.wayland = {
+      enable = lib.mkEnableOption "Wayland";
+
+      launcher = lib.mkOption {
+        description = "Which Launcher to use";
+        type = lib.types.enum ["rofi" "orkan" ];
+        default = "orkan";
+      };
+
+    };
+
 
   };
 

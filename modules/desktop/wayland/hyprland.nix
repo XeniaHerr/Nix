@@ -3,6 +3,11 @@ let
   center_mon = "desc:Acer Technologies VG270U P TEHEE00A854F";
   left_mon = "desc:Acer Technologies VG270 0x13704B20";
   right_mon = "desc:Acer Technologies VG270 0x13703D9F";
+
+  monitorfordock = (pkgs.writeShellApplication {
+        name = "monitorfordock";
+        text = builtins.readFile ./monitorscript.sh;
+      });
 in
 {
 
@@ -17,6 +22,7 @@ in
     hyprpicker
       jq
       hyprcursor
+      rose-pine-hyprcursor
 
       (pkgs.writeShellScriptBin "focusworkspacewith" ''
         #!/usr/bin/env bash
@@ -86,10 +92,11 @@ in
             "$mod, mouse:273, resizewindow"
           ];
 
-      debug.disable_logs = true;
+      debug.disable_logs = false;
 
         exec-once = [ #"${pkgs.eww}/bin/eww open example" 
         "${pkgs.eww}/bin/eww open activatelinux"
+          #  "${monitorfordock}/bin/monitorfordock"
         ];
         #++ lib.optionals config.host.desktop.dunst [
         #    "${pkgs.dunst}"
@@ -124,6 +131,10 @@ in
 
         };
 
+        env = [
+          "HYPRCURSOR_THEME,rose-pine-hyprcursor" ];
+
+
          # device = {
 
          #   key = "Enter, bincode:36";
@@ -140,7 +151,13 @@ in
 
       windowrulev2 = [
         "idleinhibit fullscreen, class:.*"
+          "float, class:org.gnome.Calculator"
       ];
+
+        layerrule = [
+          "blur, rofi"
+          "animation slide top, rofi"
+        ];
 
 
 
@@ -153,8 +170,8 @@ in
             inactive_opacity = 1.0;
 
             blur = {
-              enabled = true;
-              size = 3;
+              enabled = false;
+              size = 8;
               passes = 1;
               vibrancy = 0.1696;
             };
@@ -188,11 +205,12 @@ in
             ];
 
             animation = [
-              "windowsIn, 1, 3, easeInOutQuart, slide"
-              "windowsMove, 1, 3, easeOutQubic, slide"
-              "windowsOut, 1, 3, easeInOutQuart, popin"
+              "windowsIn, 1, 2, easeInOutQuart, slide"
+              "windowsMove, 1, 2, easeOutQubic, slide"
+              "windowsOut, 1, 2, easeInOutQuart, popin"
               "workspacesIn, 1, 3, easeOutQubic, slide"
-              "workspaces, 1,3, easeOutQubic, slidevert"
+              "workspaces, 1,3, easeOutQubic, slide"
+              "layersOut,1,2, linear, slide" 
             ];
 
 

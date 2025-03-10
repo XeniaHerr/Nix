@@ -20,16 +20,17 @@ with lib;
           height = 28;
           modules-left = ["custom/nixos" "hyprland/workspaces" "tray" ];
           modules-center = ["hyprland/window"];
-          modules-right = [ "cpu" "memory" "disk" "network" "hyprland/language" "backlight" "wireplumber" "idle_inhibitor" "battery" "clock"];
+          modules-right = [ "cpu" "memory" "disk" "network" "hyprland/language" "group/light" "wireplumber" "idle_inhibitor" "battery" "clock"];
 
           "group/light" = {
 
             modules = [ "backlight" "backlight/slider"];
+            orientation = "inherit";
 
             drawer = {
               transition-duration = 500;
               transition-left-to-right = false;
-              children-css = "light";
+              children-css = "";
 
             };
           };
@@ -39,12 +40,14 @@ with lib;
             format = "{icon} {percent}%";
             format-icons = [ "󰹐 " "󱩎 " "󱩏 " "󱩐 " "󱩑 " "󱩒 " "󱩓 " "󱩔 " "󱩕 " "󱩖 " ];
             tooltip = false;
+            device = "amdgpu_bl1";
           };
 
           "backlight/slider" = {
             min = 0;
-            max = 255;
+            max = 100;
             orientation = "horizontal";
+            device = "amdgpu_bl1";
 
           };
 
@@ -75,8 +78,8 @@ with lib;
 
           "hyprland/window" = {
             rewrite = {
-              "nvim" = " eovim - the best Editor";
-              "nvim (.*)" = "  - $1";
+              "nvim\\s*" = " eovim - the best Editor";
+              "nvim (\\S.*)" = "  - $1";
               "(.*)— Mozilla Firefox" = " - $1";
               "(.*)- Mozilla Thunderbird" = "  - $1";
               "nix-shell -p (.*)" = "  +   { $1 }";
@@ -87,9 +90,11 @@ with lib;
 
             format = "{icon} {volume}%";
 
+            format-muted = "  {volume}%";
+
             format-icons = ["" " " " "];
 
-            on-click-right = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+            on-click-right = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
 
 
             tooltip = true;
@@ -206,9 +211,12 @@ with lib;
         font-family: "Mononoki Nerd Font";
         }
 
-        .tooltip * {
-
+        tooltip,
+        #tray menu {
         background-color: @base01;
+        border-radius: 4px;
+        padding: 4px;
+        margin-top: 1em;
         }
 
         #cpu,
@@ -244,18 +252,14 @@ with lib;
         margin-top: 2px;
         border-radius: 15px 15px 15px 15px;
         background-color: @base01;
-        transition-property: all;
-        transition-duration: 0.5s;
-        transition-timing-function: ease;
+        transition: all 0.3s ease-out;
         }
 
-        .modules-left{
+        .modules-left {
         padding-right: 8px;
         border-radius: 0 15px 15px 0;
         margin-top: 2px;
-        transition-property: all;
-        transition-duration: 0.5s;
-        transition-timing-function: ease;
+        transition: all 0.3s ease-out;
         }
 
         #workspaces {
@@ -269,6 +273,8 @@ with lib;
         padding: 0 4px;
         margin: 2px;
         color: @base03;
+        transition: all 0.3s ease-out;
+        animation: linear 20s ease-in infinite;
         }
 
         #workspaces button.empty {
@@ -290,10 +296,12 @@ with lib;
 
         #idle_inhibitor.activated {
         color: @base0D;
+        transition: all 0.3s ease-in
         }
 
         #idle_inhibitor.deactivated {
         color: @base03;
+        transition: all 0.3s ease-out
         }
 
         #network {
@@ -311,10 +319,17 @@ with lib;
         color: @base0D;
         }
 
-
-        #disk {
-
+        #tray menu menuitem:hover {
+        background-color: @base02;
+        color: @base0E;
+        
         }
+
+        #tray menu *:hover {
+        background-color: @base01;
+        color: inherit;
+        }
+
         #cpu {
         border-radius: 15px 0 0 15px;
         }
@@ -348,6 +363,10 @@ with lib;
 
         }
 
+        #tray > .passive {
+        -gtk-icon-effect: dim;
+        }
+
         #language {
         border-radius: 15px 0 0 15px;
         }
@@ -359,6 +378,17 @@ with lib;
 
         #clock {
         background-color: @base01;
+        }
+
+        #wireplumber {
+
+        transition: all 0.3s ease-in
+        }
+
+        #wireplumber.muted {
+        color: @base03;
+
+        transition: all 0.3s ease-out
         }
 
         #battery {
@@ -387,11 +417,17 @@ with lib;
 
         #backlight-slider {
         padding-left: 6px;
+        min-width: 80px;
+        min-height: 5px;
 
         }
         #backlight-slider slider {
+        min-height: 0px;
         min-width: 0px;
-
+        opacity: 0;
+        background-image: none;
+        border: none;
+        box-shadow: none;
         }
 
 
@@ -399,13 +435,15 @@ with lib;
         min-width: 80px;
         border-radius: 5px;
         background-color: @base03;
-        min-height: 10px;
+        min-height: 5px;
         }
 
         #backlight-slider highlight {
-        min-width: 10px;
+        min-width: 80px;
+        min-height: 5px;
         border-radius: 5px;
         background-color: @base13;
+        color: @base0E;
         }
     '';
 
