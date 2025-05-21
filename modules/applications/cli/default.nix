@@ -14,5 +14,6 @@
     ./fzf.nix
     ./iamb.nix
     ./nvim
+    ./emacs.nix
   ];
 }

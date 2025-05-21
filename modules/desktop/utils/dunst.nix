@@ -7,7 +7,7 @@ with lib;
   };
 
 
-  config = mkIf config.host.desktop.dunst {
+  config = mkIf (config.host.desktop.wayland.notifications == "dunst") {
 
     wayland.windowManager.hyprland.settings.exec-once = [ "${pkgs.dunst}/bin/dunst"];
 
@@ -35,22 +35,22 @@ with lib;
 
         urgency_normal = {
           background = config.scheme.withHashtag.base01;
-          foreground = config.scheme.withHashtag.base06;
-          frame_color = config.scheme.withHashtag.base01;
+          foreground = config.scheme.withHashtag.base05;
+          frame_color = config.scheme.withHashtag.base00;
           highlight = config.scheme.withHashtag.base07;
         };
 
         urgency_low = {
           background = config.scheme.withHashtag.base01;
-          foreground = config.scheme.withHashtag.base0A;
-          frame_color = config.scheme.withHashtag.base01;
+          foreground = config.scheme.withHashtag.base05;
+          frame_color = config.scheme.withHashtag.base00;
           highlight = config.scheme.withHashtag.base17;
         };
 
         urgency_critical= {
           background = config.scheme.withHashtag.base01;
           foreground = config.scheme.withHashtag.base08;
-          frame_color = config.scheme.withHashtag.base01;
+          frame_color = config.scheme.withHashtag.base12;
           highlight = config.scheme.withHashtag.base17;
         };
 

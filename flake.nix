@@ -24,6 +24,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
 
     catppuccin = {
       url = "github:catppuccin/nix";
@@ -64,6 +69,17 @@
     };
 
 
+    emacs-overlays = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+
+    fabric = {
+      url = "github:Fabric-Development/fabric";
+    };
+
+
 
     #    hyprland.url = "github:hyprwm/Hyprland";
     #  hyprland.inputs.nixpkgs.follows = "nixpkgs";
@@ -73,17 +89,20 @@
     # };
   };
 
-
   outputs =  inputs @ { self, nixpkgs, home-manager, catppuccin, flake-utils, ...}: 
     let 
       system = "x86_64-linux";
-      pkgs = import nixpkgs {inherit system;};
+      pkgs = import nixpkgs {inherit system;overlays = [inputs.emacs-overlays.overlays.default];
+                            config.allowUnfree = true;};
     in 
       flake-utils.lib.eachSystem [ system ] (system: rec {
-        legacyPackages = import nixpkgs { inherit system;};
+        legacyPackages = import nixpkgs { inherit system; };
+
+        devShells.default = inputs.fabric.devShells."${system}".default;
       })
     //
     {
+
       homeConfigurations = {
         "xenia" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
@@ -91,17 +110,18 @@
           modules = [ 
             (import ./home/xenia.nix)
             (import ./modules)
-            catppuccin.homeManagerModules.catppuccin 
+            catppuccin.homeModules.catppuccin 
           ];
 
           extraSpecialArgs = {
             mywindowManager = "Hyprland";
             myscheme = "catppuccin-mocha";
             yubikey_id = ["32244578"];
-            inherit inputs;
+            inherit inputs system;
           };
 
         };
       };
+
     };
 }

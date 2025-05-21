@@ -75,7 +75,7 @@ in
 
 
     finalprofiles2 = replacenames ( filteremptyattrs cfg.profiles);
-    filecontents = { settings =  cfg.settings; profiles = finalprofiles2;} ;
+    filecontents =  cfg.settings // { profiles = finalprofiles2;} ;
     configSource = tomlFormat.generate "iamb-config.toml" filecontents;
   in mkIf config.host.applications.iamb.enable {
 

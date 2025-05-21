@@ -96,6 +96,7 @@ in
 
         exec-once = [ #"${pkgs.eww}/bin/eww open example" 
         "${pkgs.eww}/bin/eww open activatelinux"
+          "${pkgs.networkmanagerapplet}/bin/nm-applet"
           #  "${monitorfordock}/bin/monitorfordock"
         ];
         #++ lib.optionals config.host.desktop.dunst [
@@ -107,8 +108,8 @@ in
           monitor = [
             "desc:Acer Technologies VG270 0x13704B20, preferred, 1200x0, 1, transform, 1"
             "desc:Acer Technologies VG270U P TEHEE00A854F, preferred, 2280x0, 1"
-            "desc:Acer Technologies VG270U P TEHEE00A854F, addreserved, 20, 0, 0, 0"
-          #"eDP-1, addreserved, 0, 0, 0, 0"
+          #"desc:Acer Technologies VG270U P TEHEE00A854F, addreserved, 35, 0, 0, 0"
+          #  "eDP-1, addreserved, 35, 0, 0, 0"
             "desc:Acer Technologies VG270 0x13703D9F, preferred, 4840x0, 1"
             "desc:Optoma Corporation Optoma 1080P, preferred, auto, 1, mirror, eDP-1"
             "desc:BOE 0x0B66, 1920x1200@60, auto, 1"
@@ -157,6 +158,7 @@ in
         layerrule = [
           "blur, rofi"
           "animation slide top, rofi"
+          "animation slide right, dunst"
         ];
 
 
@@ -170,7 +172,7 @@ in
             inactive_opacity = 1.0;
 
             blur = {
-              enabled = false;
+              enabled = true;
               size = 8;
               passes = 1;
               vibrancy = 0.1696;

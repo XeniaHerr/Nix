@@ -11,6 +11,7 @@ in
     ./waybar.nix
     ./rofi.nix
     ./kanshi.nix
+    ./fabric
 
 
   ];
@@ -24,18 +25,25 @@ in
         default = "orkan";
       };
 
+      notifications = lib.mkOption {
+        description = "What Notifications Service to use";
+      type = lib.types.enum ["dunst" "fabric" ];
+        default = "dunst";
+      };
+
     };
 
 
   };
 
 
-  config = lib.mkIf config.host.desktop.wayland.enable
+  config =   lib.mkIf config.host.desktop.wayland.enable
     {
 
 
       home.packages = with pkgs; [
         wl-clipboard
+        libnotify
       ];
 
 
@@ -43,4 +51,5 @@ in
 
 
     };
+
 }

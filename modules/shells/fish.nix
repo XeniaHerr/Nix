@@ -6,20 +6,22 @@
   options.host.shell.fish.enable = lib.mkEnableOption "fish";
 
   config = lib.mkIf (config.host.settings.shell == "fish" || config.host.shell.fish.enable) {
-  programs.fish =  {
-    enable = false;
+    programs.fish =  {
+      enable = false;
 
-    interactiveShellInit = ''
+      interactiveShellInit = ''
     set fish_greeting
-    '';
+      '';
 
-    generateCompletions = true;
+      generateCompletions = true;
 
-    shellInitLast = ''
+      shellInitLast = ''
     zoxide init fish | source
     starship init fish | source
-    '';
+      '';
 
-  };
+    };
+
+    programs.nixvim.plugins.lsp.server.fish_lsp.enable = true;
   };
 }

@@ -1,6 +1,7 @@
 {config, pkgs,lib, inputs, ...}:
 
 let 
+   tex = pkgs.texlive.withPackages (p: with p; [ scheme-full minted listing graphviz]); 
   #jupynium = pkgs.callPackage ./jupynium-der.nix { inherit config; };
   nu-grammar = pkgs.tree-sitter.buildGrammar {
     language = "nu";
@@ -13,6 +14,7 @@ let
     };
   };
 
+
 in
   {
 
@@ -24,6 +26,12 @@ in
   options.host.applications.nvim.enable = lib.mkEnableOption "neovim";
 
   config = lib.mkIf config.host.applications.nvim.enable {
+
+    home.packages = with pkgs; [
+    neovim-remote
+      xdotool
+      tex
+    ];
 
     programs.nixvim = {
 
@@ -133,7 +141,31 @@ in
 
         lualine = {
           enable = true;
-          settings.options.globalstatus = true;
+          settings = { options = {
+            globalstatus = true;
+
+            always_divide_middle = true;
+            always_show_tabline = true;
+
+            section_separators = {
+              right = "";
+              left = "";
+            };
+
+          };
+            sections = {
+
+              lualine_a = [ "mode"];
+              lualine_b = [ "branch" "diff" "diagnostics"];
+              lualine_c = [ "filename" ];
+              
+
+              lualine_x = [ "filetype"];
+              lualine_y = [ "progress"];
+              lualine_z = [ "location"];
+
+            };
+          };
 
         };
 
@@ -311,15 +343,18 @@ in
                 vim.keymap.set("n", "<leader>==", function () vim.lsp.buf.format() end, opts)
                 vim.keymap.set("n", "<leader>Kd", function () vim.diagnostic.open_float(nil, {focusable = true}) end, opts)
                 vim.keymap.set("n", "<leader>fd", function () require('telescope.builtin').diagnostics() end, opts)
+                vim.keymap.set("n", "<leader>cc", "<cmd>Compile<CR>", opts)
                 vim.lsp.inlay_hint.enable(true, {0})
               '';
 
               servers = {
 
                 clangd.enable = true;
+                
                 clangd.cmd = [ "clangd" "--header-insertion=iwyu" "--background-index" "--function-arg-placeholders=false"];
 
                 bashls.enable = true;
+                cmake.enable = true;
 
                 nixd.enable = true;
 
@@ -327,8 +362,11 @@ in
 
                 nushell.enable = true;
 
-                fish_lsp.enable = true;
+            #  fish_lsp.enable = true;
                 texlab.enable = true;
+
+                pyright.enable = true;
+
 
               };
             };
@@ -492,33 +530,47 @@ in
       #      };
 
 
-             vimtex = {
-               enable = true;
+        vimtex = {
+          enable = true;
+          texlivePackage = tex;
 
-        settings = {
-          compiler_method = "lualatex";
+          settings = {
+            compiler_method = "latexmk";
             view_method = "zathura";
+            compiler_progname = "nvim";
+          };
         };
-             };
 
 
            };
-    extraPlugins = with pkgs.vimPlugins; [
-      vim-nix
-      fugitive
-      friendly-snippets
-      vim-obsession
-      tabular
-      vim-visual-multi
-      (base16-vim.overrideAttrs ( old:
+      extraPlugins = with pkgs.vimPlugins; [
+        plenary-nvim
+   (pkgs.vimUtils.buildVimPlugin {
+    name = "compilation-mode";
+          dependencies = [ plenary-nvim];
+  src = pkgs.fetchFromGitHub {
+    owner = "ej-shafran";
+    repo = "compile-mode.nvim";
+    tag = "v5.5.0";
+      hash = "sha256-wkiKD+TWE40blMk48Vg2UTBpeSQL0QOpq1Rba9arGOo=";
+  };
+  }
+    )
+        vim-nix
+        fugitive
+        friendly-snippets
+        vim-obsession
+        tabular
+        vim-visual-multi
+        (base16-vim.overrideAttrs ( old:
           let 
             scheme-file = config.scheme {  target = "tinted-vim";
               templateRepo = "${inputs.base16-nvim}";
               check-parsed-config-yaml = false;
-            use-ifd = false;};
+              use-ifd = false;};
           in {patchPhase = ''cp ${scheme-file} colors/base16-customscheme.vim'';}))
         #jupynium
-    ];
+      ];
 
            opts = {
              number = true;
@@ -545,11 +597,6 @@ in
             -- tinted-nvim colorscheme
             vim.g.tinted_colorspace = 256
             vim.cmd.colorscheme('base16-customscheme')
-
-             -- Vimtex config
-
-             vim.g.vimtex_view_method = 'zathura'
-             vim.g.vimtex_compiler_method = 'lualatex'
 
              function Make(opts)
              local dir_contents = vim.split(vim.fn.system("ls"), "\n")

@@ -33,6 +33,8 @@ options = {
       cloc
       clang-tools
       nodejs
+      cmake
+      gnumake
     ];
   };
     

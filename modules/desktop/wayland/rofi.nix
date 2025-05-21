@@ -26,7 +26,7 @@ with lib;
       background-color: @background;
       border: 2;
       padding: 5;
-      border-radius: 4;
+      border-radius: 8;
       border-color: ${config.scheme.withHashtag.base02};
       }
 

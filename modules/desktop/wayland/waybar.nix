@@ -18,6 +18,7 @@ with lib;
           output = ["eDP-1" "Acer Technologies VG270U P TEHEE00A854F"];
           position = "top";
           height = 28;
+          exclusive = true;
           modules-left = ["custom/nixos" "hyprland/workspaces" "tray" ];
           modules-center = ["hyprland/window"];
           modules-right = [ "cpu" "memory" "disk" "network" "hyprland/language" "group/light" "wireplumber" "idle_inhibitor" "battery" "clock"];
@@ -90,7 +91,7 @@ with lib;
 
             format = "{icon} {volume}%";
 
-            format-muted = "  {volume}%";
+            format-muted = " {volume}%";
 
             format-icons = ["" " " " "];
 
@@ -155,13 +156,23 @@ with lib;
           "clock" = {
             actions = {
               on-click-right = "mode";
+              on-scroll-up = "tz_up";
+              on-scroll-down = "tz_down";
             };
             tooltip = true;
-            tooltip-format = "{:%Y-%m-%d}";
+            tooltip-format = "<tt><small>{calendar}</small></tt>";
             calendar = {
-              mode = "month";
-              weeks-pos = "left";
+              mode = "year";
+              weeks-pos = "right";
               on-scroll = 1;
+              mode-mon-col = 3;
+              format = {
+                months = "<span color='${config.scheme.withHashtag.base06}'><b>{}</b></span>";
+                days = "<span color='${config.scheme.withHashtag.base03}'><b>{}</b></span>";
+                weeks = "<span color='${config.scheme.withHashtag.base0B}'><b>W{}</b></span>";
+                weekdays = "<span color='${config.scheme.withHashtag.base13}'><b>{}</b></span>";
+                today = "<span color='${config.scheme.withHashtag.base17}'><b>{}</b></span>";
+              };
             };
           };
 

@@ -19,9 +19,13 @@ config = lib.mkIf config.host.applications.kitty.enable {
       size = 14;
     };
 
-      themeFile = "Catppuccin-Mocha";
+      #themeFile = "Catppuccin-Mocha";
 
-      extraConfig = config.scheme inputs.base16-kitty;
+      extraConfig =  builtins.readFile (config.scheme inputs.base16-kitty);
+      settings = {
+
+        background_opacity = 0.5;
+      };
 /*
       settings = {
 

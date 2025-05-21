@@ -9,6 +9,7 @@
     ./dev
     ./theming
     ./security
+    ./mail
 
   ];
 

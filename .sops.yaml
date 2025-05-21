@@ -1,0 +1,9 @@
+keys:
+- &xenia ADCDB27F52141FF0A4AB8A40C9E3155008EA3A89
+
+creation_rules:
+- path_regex: home/secrets/*
+  key_groups:
+  - pgp:
+    - *xenia
+

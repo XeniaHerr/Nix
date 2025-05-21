@@ -5,21 +5,29 @@
 
   config = lib.mkIf config.host.applications.git.enable {
 
-  home.packages = [ 
-    pkgs.gh
-    pkgs.git
-  ];
+    home.packages = [ 
+      pkgs.gh
+      pkgs.git
+    ];
 
 
-  programs.git = {
+    programs.git = {
 
-    enable = true;
+      enable = true;
 
-    userName = "Xenia Herr";
+      userName = "Xenia Herr";
 
-    userEmail = "xeniaherr@gmail.com";
+      userEmail = "xeniaherr@gmail.com";
 
-  };
+      extraConfig = {
+        init = {
+          defaultBranch = "main";
+        };
+      };
+
+
+
+    };
 
 
     #TODO: Move this in a seperate nix file

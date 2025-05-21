@@ -1,21 +1,32 @@
-{config,pkgs,  ...}:
+{config,pkgs, lib,...}:
 
+with lib;
 {
 
-  services.emacs.enable = true;
+  options.host.applications.cli.emacs.enable = mkEnableOption "Emacs";
 
-  programs.emacs = {
-    enable = true;
-    #    extraPackages = epkgs: [ epkgs.evil ];
-    package = (pkgs.emacsWithPackagesFromUsePackage {
+  config = mkIf config.host.applications.cli.emacs.enable {
 
-      config = ./emacs.el;
 
-      defaultInitFile = true;
+    home.packages = [
+      pkgs.nixd
+    ];
 
-      extraEmacsPackages = epkgs: [
-      epkgs.visual-replace ];
+    services.emacs.enable = true;
 
-    });
+    programs.emacs = {
+      enable = true;
+      #    extraPackages = epkgs: [ epkgs.evil ];
+      package = (pkgs.emacsWithPackagesFromUsePackage {
+
+        config = ./emacs.el;
+
+        defaultInitFile = true;
+
+        extraEmacsPackages = epkgs: [
+          epkgs.visual-replace ];
+
+      });
+    };
   };
 }

@@ -1,6 +1,6 @@
 from fabric.core import Application
 from fabric.notifications import Notification, Notifications
-from gi.repository import GdkPixbuf
+from gi.repository import GdkPixbuf, Gdk
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
@@ -9,8 +9,10 @@ from fabric.widgets.button import Button
 from fabric.utils import get_relative_path, invoke_repeater
 from typing import cast
 
+
 import os
 import json
+import sys
 
 TIMEOUT = 1000 * 10
 
@@ -26,7 +28,11 @@ class NotificationElem(Box):
         )
 
         self.savefile = file
+
         self._notification = notification
+        if self.savefile:
+            self._save_to_file()
+
 
         content = Box(spacing=4, orientation="h")
 
@@ -114,16 +120,16 @@ class NotificationElem(Box):
             ),
         )
         invoke_repeater(
-            TIMEOUT,
+            TIMEOUT if self._notification.timeout <= 0 else self._notification.timeout,
             lambda: 
                 self._notification.close("expired") if self._notification.urgency != 2 else None,
             initial_call=False,
         )
     def _save_to_file(self):
         if self.savefile is not None:
-            content = self._notification.serialize
+            content = self._notification.serialize()
             content_as_json = json.dumps(obj=content,skipkeys=True)
-            file = open(self.savefile, "r+")
+            file = open(self.savefile, "a+" )
             file.write( content_as_json)
 
             
@@ -131,8 +137,15 @@ class NotificationElem(Box):
 
 
 
-
 if __name__ =="__main__":
+
+    display = Gdk.Display.get_default()
+    n_mons = display.get_n_monitors()
+    
+    monitors = dict([(display.get_monitor(i).get_model(),i) for i in range(n_mons)])
+    MONITOR = monitors.get("VG270U P") or monitors.get("eDP-1")
+
+
     SAVE_NOTIFICATIONS = False
     if TMP_DIR := os.getenv("XDG_RUNTIME_DIR"):
         SAVE_NOTIFICATIONS = True
@@ -144,10 +157,13 @@ if __name__ =="__main__":
         Window(
             margin="60% 0px 0px 0px",
             anchor="top right",
+            monitor=MONITOR,
+            exclusivity="none",
             child=Box(
                 size=2,
                 spacing=4,
                 orientation="v",
+                
             ).build(lambda viewport, _: Notifications(on_notification_added=lambda notif_s, nid: viewport.add(
                 NotificationElem(
                     cast(
@@ -165,6 +181,10 @@ if __name__ =="__main__":
     )
 
 
-    app.set_stylesheet_from_file(get_relative_path("./ownstyles.css"))
+    STYLESHEET = sys.argv[1]
+    if not STYLESHEET:
+        print("No stylesheet found")
+
+    app.set_stylesheet_from_file(STYLESHEET)
 
     app.run()
