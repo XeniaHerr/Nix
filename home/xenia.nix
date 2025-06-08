@@ -342,9 +342,9 @@ in
 
       ${bitwarden-cli}/bin/bw login xeniaherr@gmail.com --passwordfile "${config.sops.secrets."passwords/masterpassword".path}" --raw
       LOCAL_SESSION_KEY=$(${bitwarden-cli}/bin/bw unlock  --passwordfile "${config.sops.secrets."passwords/masterpassword".path}" --raw)
-LOCAL_PASSWORD=$(bw get password VPN --session $LOCAL_SESSION_KEY )
+LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session $LOCAL_SESSION_KEY )
 
-      LOCAL_TOTP=$(bw get totp VPN --session $LOCAL_SESSION_KEY)
+      LOCAL_TOTP=$(bw get totp 89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session $LOCAL_SESSION_KEY)
 
       bw lock
 
@@ -432,6 +432,9 @@ exec "$GS_EXECUTABLE" -q -dNODISPLAY -P- -dSAFER -dDELAYSAFER\
     dust
     zathura
     manix
+
+
+    telegram-desktop
 
 
     (writeShellScriptBin "storefind" ''

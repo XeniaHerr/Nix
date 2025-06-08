@@ -10,7 +10,13 @@ with lib;
 
     home.packages = [
       pkgs.nixd
+      pkgs.ripgrep
+      pkgs.direnv
+      pkgs.lorri
+      pkgs.cmake-language-server
     ];
+
+    services.lorri.enable = true;
 
     services.emacs.enable = true;
 
@@ -24,7 +30,10 @@ with lib;
         defaultInitFile = true;
 
         extraEmacsPackages = epkgs: [
-          epkgs.visual-replace ];
+          epkgs.visual-replace
+          epkgs.treesit-grammars.with-all-grammars
+        ];
+
 
       });
     };

@@ -81,6 +81,7 @@ with lib;
             rewrite = {
               "nvim\\s*" = " eovim - the best Editor";
               "nvim (\\S.*)" = "  - $1";
+              "(.*)- GNU Emacs at (.*)" = " { $2 } - $1 " ;
               "(.*)— Mozilla Firefox" = " - $1";
               "(.*)- Mozilla Thunderbird" = "  - $1";
               "nix-shell -p (.*)" = "  +   { $1 }";
