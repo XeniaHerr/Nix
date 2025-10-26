@@ -15,6 +15,8 @@ with lib;
       configuration {
       modes: "window,drun,run,ssh";
       font: "Mononoki Nerd Font 18";
+      terminal: "${pkgs.kitty}/bin/kitty";
+      font: "Mononoki Nerd Font
       show-icons: true;
       fixed-num-lines: false;
       drun-show-actions: false;

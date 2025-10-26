@@ -32,6 +32,7 @@
 
     catppuccin = {
       url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
 
@@ -77,6 +78,7 @@
 
     fabric = {
       url = "github:Fabric-Development/fabric";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
 
@@ -111,6 +113,8 @@
             (import ./home/xenia.nix)
             (import ./modules)
             catppuccin.homeModules.catppuccin 
+            # inputs.base16.homeManagerModule {
+            #   scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";}
           ];
 
           extraSpecialArgs = {

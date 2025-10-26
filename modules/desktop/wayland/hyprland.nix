@@ -40,6 +40,7 @@ in
         "$mod, Return, exec, kitty"
         "$mod, x, exec, firefox"
         "$mod, d, exec, Orkan run"
+        "$mod SHIFT, E, exec, emacsclient -c"
         "$mod SHIFT, Q, exit"
         "$mod, F, fullscreen, 0"
         "$mod, w, killactive"
@@ -133,7 +134,9 @@ in
         };
 
         env = [
-          "HYPRCURSOR_THEME,rose-pine-hyprcursor" ];
+          "HYPRCURSOR_THEME,rose-pine-hyprcursor"
+           "AQ_DRM_DEVICES,/dev/dri/card1"
+        ];
 
 
          # device = {
@@ -252,7 +255,7 @@ in
     settings = {
 
       general = {
-      disable_loading_bar = false;
+#      disable_loading_bar = false;
 
       hide_cursor = false;
       };

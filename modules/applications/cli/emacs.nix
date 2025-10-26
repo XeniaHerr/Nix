@@ -14,11 +14,17 @@ with lib;
       pkgs.direnv
       pkgs.lorri
       pkgs.cmake-language-server
+      pkgs.zip
+      pkgs.emacs-lsp-booster
+      pkgs.ripgrep
     ];
 
     services.lorri.enable = true;
 
     services.emacs.enable = true;
+    services.emacs.client.enable = true;
+    services.emacs.startWithUserSession = "graphical";
+#    services.emacs.defaultEditor = lib.mkForce true;
 
     programs.emacs = {
       enable = true;

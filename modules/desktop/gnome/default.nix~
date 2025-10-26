@@ -1,0 +1,15 @@
+{config, pkgs,lib, ...}: {
+# Gnome desktop shell
+
+
+  options.host.desktop.gnome = lib.mkEnableOption "gnome";
+
+
+  config  = lib.mkIf (config.host.desktop.gnome) {
+
+#    services.displayManager.gdm.enable = true;
+    services.desktopManager.gnome.enable = true;
+
+  };
+
+}

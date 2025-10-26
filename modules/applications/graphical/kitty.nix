@@ -24,7 +24,7 @@ config = lib.mkIf config.host.applications.kitty.enable {
       extraConfig =  builtins.readFile (config.scheme inputs.base16-kitty);
       settings = {
 
-        background_opacity = 0.5;
+        # background_opacity = 0.5;
       };
 /*
       settings = {

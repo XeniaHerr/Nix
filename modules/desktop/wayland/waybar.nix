@@ -182,7 +182,8 @@ with lib;
               warning = 30;
               critical = 15;
             };
-            format = "{icon} {capacity}%";
+            format = "{icon} {capacity}";
+            format-charging = "󱐋 {capacity}%";
             format-icons = [" "  " "  " "  " "  " "];
             max-length = 25;
           };
@@ -418,6 +419,8 @@ with lib;
         animation-iteration-count: infinite;
         animation-direction: alternate;
         }
+
+
 
         @keyframes blink {
         to {

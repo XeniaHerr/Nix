@@ -14,5 +14,6 @@
     ./x11
     ./wayland
     ./utils
+    ./gnome
   ];
 }

@@ -1,7 +1,7 @@
 {config, pkgs,lib, inputs, ...}:
 
 let 
-   tex = pkgs.texlive.withPackages (p: with p; [ scheme-full minted listing graphviz]); 
+   tex = pkgs.texlive.withPackages (p: with p; [ scheme-full minted listing graphviz multidef]); 
   #jupynium = pkgs.callPackage ./jupynium-der.nix { inherit config; };
   nu-grammar = pkgs.tree-sitter.buildGrammar {
     language = "nu";
@@ -19,7 +19,7 @@ in
   {
 
     imports = [
-  inputs.nixvim.homeManagerModules.nixvim 
+  inputs.nixvim.homeModules.nixvim 
 
   ];
 
@@ -30,7 +30,7 @@ in
     home.packages = with pkgs; [
     neovim-remote
       xdotool
-      tex
+      #tex
     ];
 
     programs.nixvim = {
