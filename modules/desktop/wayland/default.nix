@@ -12,6 +12,12 @@ in
     ./rofi.nix
     ./kanshi.nix
     ./fabric
+    ./caelestia.nix
+    ./ax-shell.nix
+    ./niri.nix
+    ./swww.nix
+    ./swaylock.nix
+    ./wpaperd.nix
 
 
   ];
@@ -27,7 +33,7 @@ in
 
       notifications = lib.mkOption {
         description = "What Notifications Service to use";
-      type = lib.types.enum ["dunst" "fabric" ];
+      type = lib.types.enum ["dunst" "fabric" "caelestia" "ax-shell" ];
         default = "dunst";
       };
 
@@ -44,9 +50,10 @@ in
       home.packages = with pkgs; [
         wl-clipboard
         libnotify
+        wlr-randr
       ];
 
-
+# Helpful command TODO:  wlr-randr --json | jq -r '.[] | select(.description == "Acer Technologies VG270 0x13703D9F (DP-10)" ) | .name'
 
 
 

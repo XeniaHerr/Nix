@@ -9,7 +9,13 @@ with lib;
 
   config = mkIf (config.host.desktop.wayland.notifications == "dunst") {
 
-    wayland.windowManager.hyprland.settings.exec-once = [ "${pkgs.dunst}/bin/dunst"];
+#    wayland.windowManager.hyprland.settings.exec_once = [ "${pkgs.dunst}/bin/dunst"];
+    wayland.windowManager.hyprland.settings.on = [{
+      _args = [
+        "hyprland.start"
+        (lib.generators.mkLuaInline "function()\n hl.exec_cmd(\"${pkgs.dunst}/bin/dunst\")\nend")
+      ];
+    }];
 
     home.packages = [
       pkgs.libnotify

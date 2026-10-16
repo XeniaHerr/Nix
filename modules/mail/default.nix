@@ -58,8 +58,8 @@ with lib;
         unimail = {
           primary = false;
 
-          address = "kenneth.herr@stud.uni-heidelberg.de";
-          realName = "Kenneth Herr";
+          address = "xenia.maylin.zoe@stud.uni-heidelberg.de";
+          realName = "Xenia Herr";
           userName = "dd272";
 
           passwordCommand = "cat ${config.sops.secrets."passwords/Unipassword".path}";

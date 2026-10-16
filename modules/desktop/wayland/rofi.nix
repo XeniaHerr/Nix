@@ -6,17 +6,24 @@ with lib;
   config = {
 
     home.packages = with pkgs; [
-      rofi-wayland
+      rofi
     ];
 
-    wayland.windowManager.hyprland.settings.bind = [ "$mod, SPACE, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun"];
+    #    wayland.windowManager.hyprland.settings.bind = [ "$mod, SPACE, exec, ${pkgs.rofi}/bin/rofi -show drun"];
+
+    wayland.windowManager.hyprland.settings.bind = [
+      {_args = [
+         "SUPER + SPACE"
+         (lib.generators.mkLuaInline ("hl.dsp.exec_cmd(\"rofi -show drun\")"))
+       ];
+      }];
+    #font: "Mononoki Nerd Font 18";
 
     xdg.configFile."rofi/config.rasi".source = pkgs.writeText "rofi-config" ''
       configuration {
       modes: "window,drun,run,ssh";
-      font: "Mononoki Nerd Font 18";
       terminal: "${pkgs.kitty}/bin/kitty";
-      font: "Mononoki Nerd Font
+      font: "Mononoki Nerd Font 18";
       show-icons: true;
       fixed-num-lines: false;
       drun-show-actions: false;

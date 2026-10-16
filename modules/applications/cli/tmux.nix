@@ -7,9 +7,9 @@
   config = lib.mkIf config.host.applications.tmux.enable {
   programs.tmux = {
     enable = true;
-    shell = "${pkgs.nushell}/bin/nu";
+    shell = "${pkgs.zsh}/bin/zsh";
     clock24 = true;
-    keyMode = "vi";
+    keyMode = "emacs";
     escapeTime = 10;
     mouse= true;
 

@@ -22,6 +22,6 @@
 
     };
 
-    programs.nixvim.plugins.lsp.server.fish_lsp.enable = true;
+    #programs.nixvim.plugins.lsp.server.fish_lsp.enable = true;
   };
 }

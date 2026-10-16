@@ -18,31 +18,31 @@
       du = "${pkgs.dust}/bin/dust";
       };
 
-    initExtra = ''
-    function Resume {
-        fg
-        zle push-input
-        BUFFER=""
-        zle accept-line
-      }
-    zle -N Resume
-    bindkey "^Z" Resume
-    bindkey '^ ' autosuggest-accept
-    zstyle ':omz:plugins:alias-finder' autoload yes # disabled by default
-    zstyle ':omz:plugins:alias-finder' longer yes # disabled by default
-    zstyle ':omz:plugins:alias-finder' exact yes # disabled by default
-    zstyle ':omz:plugins:alias-finder' cheaper yes # disabled by default
-      '' + lib.optionalString (config.host.applications.ranger.enable) ''
-    function ranger-cd {
-        tempfile="$(mktemp -t tmp.XXXXXX)"
-        ${pkgs.ranger}/bin/ranger --choosedir="$tempfile" "''${@:-$(pwd)}"
-        test -f "$tempfile" &&
-        if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-            cd -- "$(cat "$tempfile")"
-        fi  
-        rm -f -- "$tempfile"
-    }
-    bindkey -s "^O" "ranger-cd\n"
+    initContent = ''
+    # function Resume {
+    #     fg
+    #     zle push-input
+    #     BUFFER=""
+    #     zle accept-line
+    #   }
+    # zle -N Resume
+    # bindkey "^Z" Resume
+    # bindkey '^ ' autosuggest-accept
+    # zstyle ':omz:plugins:alias-finder' autoload yes # disabled by default
+    # zstyle ':omz:plugins:alias-finder' longer yes # disabled by default
+    # zstyle ':omz:plugins:alias-finder' exact yes # disabled by default
+    # zstyle ':omz:plugins:alias-finder' cheaper yes # disabled by default
+    #   '' + lib.optionalString (config.host.applications.ranger.enable) ''
+    # function ranger-cd {
+    #     tempfile="$(mktemp -t tmp.XXXXXX)"
+    #     ${pkgs.ranger}/bin/ranger --choosedir="$tempfile" "''${@:-$(pwd)}"
+    #     test -f "$tempfile" &&
+    #     if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+    #         cd -- "$(cat "$tempfile")"
+    #     fi  
+    #     rm -f -- "$tempfile"
+    # }
+    # bindkey -s "^O" "ranger-cd\n"
         '';
 
     oh-my-zsh = {
@@ -57,17 +57,6 @@
   };
 
     #TODO: Make these sepereate nix files
-  programs.zoxide = {
-
-    enable = true;
-    enableZshIntegration = true;
-    enableFishIntegration = true;
-
-    options = [
-      "--cmd cd"
-    ];
-
-  };
 
 
   catppuccin.zsh-syntax-highlighting.enable = true;
@@ -83,9 +72,9 @@
 
       #defaultOptions = [ "--ansi" "--border=double"];
   };
-  #programs.eza.enable = true;
-  #programs.eza.enableNushellIntegration = true;
-  #programs.eza.enableZshIntegration = true;
+  programs.eza.enable = true;
+  programs.eza.enableNushellIntegration = true;
+  programs.eza.enableZshIntegration = true;
 };
 }
 

@@ -15,14 +15,28 @@
 
       enable = true;
 
-      userName = "Xenia Herr";
 
-      userEmail = "xeniaherr@gmail.com";
+      signing = {
+        format = "openpgp";
+        signByDefault = true;
+      };
 
-      extraConfig = {
+      settings = {
+
+
+
+        user = {
+        
+      name = "Xenia Herr";
+
+      email = "xeniaherr@gmail.com";
+        };
+
+      
         init = {
           defaultBranch = "main";
         };
+      
       };
 
 

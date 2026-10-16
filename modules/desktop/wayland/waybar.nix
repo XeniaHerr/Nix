@@ -9,19 +9,26 @@ with lib;
   config = mkIf config.host.desktop.waybar {
 
 
-    wayland.windowManager.hyprland.settings.exec-once = [ "${pkgs.waybar}/bin/waybar"];
+    #    wayland.windowManager.hyprland.settings.exec-once = [ "${pkgs.waybar}/bin/waybar"];
+    wayland.windowManager.hyprland.settings.on = [{
+      _args = [
+        "hyprland.start"
+        (lib.generators.mkLuaInline "function()\n hl.exec_cmd(\"${pkgs.waybar}/bin/waybar\")\nend")
+      ];
+    }];
+    programs.niri.settings.spawn-at-startup = [ { argv = ["${pkgs.waybar}/bin/waybar"];}];
     programs.waybar = {
       enable = true;
       settings = {
         mainBar = {
           layer = "top";
-          output = ["eDP-1" "Acer Technologies VG270U P TEHEE00A854F"];
+          output = ["Acer Technologies VG270U P TEHEE00A854F" "eDP-1"];
           position = "top";
           height = 28;
           exclusive = true;
-          modules-left = ["custom/nixos" "hyprland/workspaces" "tray" ];
-          modules-center = ["hyprland/window"];
-          modules-right = [ "cpu" "memory" "disk" "network" "hyprland/language" "group/light" "wireplumber" "idle_inhibitor" "battery" "clock"];
+          modules-left = ["custom/nixos"] ++ (if (config.host.desktop.windowManager == "Hyprland") then  [ "hyprland/workspaces"] else ["niri/workspaces"]) ++ [ "tray" ];
+          modules-center = if (config.host.desktop.windowManager == "Hyprland") then ["hyprland/window"] else ["niri/window"] ;
+          modules-right = [ "cpu" "memory" "disk" "network"] ++ (if (config.host.desktop.windowManager == "Hyprland") then [ "hyprland/language"] else ["niri/language"] ) ++ [ "group/light" "wireplumber" "idle_inhibitor" "battery" "clock"];
 
           "group/light" = {
 
@@ -76,6 +83,16 @@ with lib;
           "hyprland/language" = {
             format = "{short}";
           };
+          "niri/window" = {
+            rewrite = {
+              "nvim\\s*" = " eovim - the best Editor";
+              "nvim (\\S.*)" = "  - $1";
+              "(.*)- GNU Emacs at (.*)" = " { $2 } - $1 " ;
+              "(.*)— Mozilla Firefox" = " - $1";
+              "(.*)- Mozilla Thunderbird" = "  - $1";
+              "nix-shell -p (.*)" = "  +   { $1 }";
+            };
+          };
 
           "hyprland/window" = {
             rewrite = {
@@ -114,7 +131,7 @@ with lib;
 
           "cpu" = {
             interval = 5;
-            format = "  {}%";
+            format = "  {usage}%";
             max-length = 10;
 
             states = {
@@ -182,10 +199,15 @@ with lib;
               warning = 30;
               critical = 15;
             };
-            format = "{icon} {capacity}";
+            format = "{icon} {capacity}%";
             format-charging = "󱐋 {capacity}%";
             format-icons = [" "  " "  " "  " "  " "];
             max-length = 25;
+          };
+
+          "niri/workspaces" = {
+            all-outputs = true;
+
           };
         };
 

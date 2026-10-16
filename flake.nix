@@ -12,7 +12,12 @@
   };
   inputs = {
 
-    nixpkgs.url = "github:NixOS/nixpkgs";
+
+    my-bar = {
+      url = "github:XeniaHerr/niri-quickshell";
+    };
+
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -21,7 +26,7 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+  #    inputs.nixpkgs.follows = "nixpkgs";
     };
 
     sops-nix = {
@@ -75,32 +80,43 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-
     fabric = {
       url = "github:Fabric-Development/fabric";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    caelestia = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # ax-shell = {
+    #   url = "git+file:///home/xenia/Projects/Ax-Shell";
+
+    #   inputs.nixpkgs.follows = "nixpkgs";};
 
 
-    #    hyprland.url = "github:hyprwm/Hyprland";
-    #  hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    # hyprland-plugins = {
-    #  url = "github:hyprwm/hyprland-plugins";
-    #  inputs.hyprland.follows = "hyprland";
-    # };
+    niri = {
+      url  ="github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+
   };
 
   outputs =  inputs @ { self, nixpkgs, home-manager, catppuccin, flake-utils, ...}: 
     let 
       system = "x86_64-linux";
-      pkgs = import nixpkgs {inherit system;overlays = [inputs.emacs-overlays.overlays.default];
+
+      
+      pkgs = import nixpkgs {inherit system;overlays = [inputs.emacs-overlays.overlays.default 
+                                                       inputs.niri.overlays.niri ];
                             config.allowUnfree = true;};
     in 
       flake-utils.lib.eachSystem [ system ] (system: rec {
         legacyPackages = import nixpkgs { inherit system; };
 
-        devShells.default = inputs.fabric.devShells."${system}".default;
+
       })
     //
     {
@@ -112,7 +128,12 @@
           modules = [ 
             (import ./home/xenia.nix)
             (import ./modules)
-            catppuccin.homeModules.catppuccin 
+            inputs.caelestia.homeManagerModules.default
+#            inputs.sops-nix.homeManagerModules.default
+            #            inputs.ax-shell.homeManagerModules.default
+            inputs.niri.homeModules.niri
+            catppuccin.homeModules.catppuccin
+
             # inputs.base16.homeManagerModule {
             #   scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";}
           ];
@@ -129,3 +150,19 @@
 
     };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

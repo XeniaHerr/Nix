@@ -1,4 +1,4 @@
-{...}:
+{pkgs, ...}:
 
 {
 
@@ -15,5 +15,10 @@
     ./iamb.nix
     ./nvim
     ./emacs.nix
+    
   ];
+
+config.home.packages = [
+
+(pkgs.callPackage ./ankify.nix {} )];
 }

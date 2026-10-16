@@ -15,7 +15,7 @@ with lib;
   description = ''
     Attribute set of aliases for different shells
     '';
-    type = types.attrsOf types.string;
+    type = types.attrsOf types.str;
       example = ''
         aliases = {
         ls = "ls -alh"

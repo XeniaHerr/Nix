@@ -1,9 +1,28 @@
 { config, pkgs,  inputs, specialArgs, lib,  ... }:
 
 let
+
+
+eduroamconf = 
+      {
+
+      auth = ''
+n         key_mgmt=WPA-EAP
+
+         eap=TTLS
+         ca_cert="/home/xenia/.config/cat_installer/ca.pem"
+         identity="dd272@uni-heidelberg.de"
+         password=" ${config.sops.secrets."passwords/Unipassword"}.q
+         phase2="auth=MSCHAPV2"
+         pairwise=CCMP
+         altsubject_match="DNS:radius-node1.urz.uni-heidelberg.de"
+         anonymous_identity="eduroamHDcat2024@uni-heidelberg.de"
+      '';
+    };
+
   
 
-  # tex = pkgs.texlive.withPackages (p: with p; [ scheme-full minted listing graphviz multidef]); 
+  # Tex = pkgs.texlive.withPackages (p: with p; [ scheme-full minted listing graphviz multidef]); 
   inherit (specialArgs) mywindowManager;
 in
 {
@@ -42,13 +61,13 @@ in
 
   gtk = {
     enable = true;
-      theme = {
-       name = "Tokyonight-Dark";
-      package = pkgs.tokyo-night-gtk;
-    };
+    #   theme = {
+    #    name = "Tokyonight-Dark";
+    #   package = pkgs.tokyonight-gtk-theme;
+    # };
 
     iconTheme = {
-      package = pkgs.libsForQt5.breeze-icons;
+      package = pkgs.kdePackages.breeze-icons;
       name = "breeze-dark";
     };
   };
@@ -77,7 +96,7 @@ in
     nerd-fonts.iosevka
     nerd-fonts.jetbrains-mono
     nerd-fonts.envy-code-r
-
+typst
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
@@ -85,12 +104,16 @@ in
     #   echo "Hello, ${config.home.username}!"
     # '')
 
+    anki-bin
+
+    signal-desktop
+
     (writeShellScriptBin "univpn" ''
       #!/usr/bin/env bash
 
       #      masterpw=$(cat ${config.sops.secrets."passwords/masterpassword".path})
 
-      ${bitwarden-cli}/bin/bw login xeniaherr@gmail.com --passwordfile "${config.sops.secrets."passwords/masterpassword".path}" --raw
+      ${bitwarden-cli}/bin/bw login xeniaherr@gmail.com --passwordfile "${config.sops.secrets."passwords/masterpassword".path}" --quiet --raw
       LOCAL_SESSION_KEY=$(${bitwarden-cli}/bin/bw unlock  --passwordfile "${config.sops.secrets."passwords/masterpassword".path}" --raw)
 LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session $LOCAL_SESSION_KEY )
 
@@ -102,7 +125,7 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
 
       sudo_password=$(cat ${config.sops.secrets."passwords/Unipassword".path})
 
-      echo -e "$LOCAL_PASSWORD\n$LOCAL_TOTP" | sudo ${openconnect_gnutls}/bin/openconnect vpn-ac.urz.uni-heidelberg.de --protocol='anyconnect' --useragent='AnyConnect' --user='dd272' --passwd-on-stdin --no-external-auth
+      echo -e "$LOCAL_PASSWORD\n$LOCAL_TOTP" | sudo ${openconnect}/bin/openconnect vpn-ac.urz.uni-heidelberg.de --protocol='anyconnect' --useragent='AnyConnect' --user='dd272' --passwd-on-stdin --no-external-auth
 
     '')
 
@@ -116,6 +139,8 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
       '')
 
     ghostscript
+
+    unzip
 
 #     (writeShellScriptBin "pdf2dsc" ''
 # #!/nix/store/4k90qpzh1a4sldhnf7cxwkm9c0agq4fp-bash-interactive-5.2p37/bin/sh
@@ -161,8 +186,8 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
     ripgrep
     pavucontrol
     pipewire
-      #bitwarden-desktop
-    bitwarden
+#      bitwarden-desktop
+#    bitwarden
     bitwarden-cli
     wpa_supplicant_gui
     #    ( pkgs.texlive.withPackages (p: with p; [ inherit (pkgs.texlive) scheme-full minted listing graphviz multidef;]) )
@@ -170,23 +195,25 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
 #    (texlive.scheme-full)
     texlivePackages.graphviz
     texlivePackages.multidef
-    whatsie
+    #whatsie
+    whatsapp-electron
 
 
-
+    zulip
     man-pages
     man-pages-posix
     direnv
-      youtube-music
+    pear-desktop
     cliphist
     socat
     bat
     dust
     zathura
     manix
-
+    pdfpc
 
     telegram-desktop
+    teams-for-linux
 
 
     (writeShellScriptBin "storefind" ''
@@ -213,6 +240,12 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
     nix-direnv.enable = true;
   };
 
+  # networking.wireless.networks = {
+  #   eduroam = {
+  #     auth = {
+  #     }
+  #   };};
+
   host = {
 
     settings.shell = "zsh";
@@ -225,6 +258,7 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
       lll = "ls -ahl";
       lg = "lazygit";
       mytest = "echo Hello World";
+      ee = "emacsclient  -r -n ";
     };
 
 
@@ -235,23 +269,29 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
     #features.theming.enable = true;
 
     #features.theming.scheme = "catppuccin-mocha";
-
-    desktop.wayland.enable = if mywindowManager == "Hyprland" then lib.mkDefault true else lib.mkDefault false; 
+    desktop.windowManager = "Hyprland";
+    desktop.wayland.enable = if mywindowManager == "Hyprland" || mywindowManager == "niri" then lib.mkDefault true else lib.mkDefault false; 
     desktop.enable = true;
     #desktop.dunst = true;
-    desktop.waybar = true;
+    desktop.waybar = false;
+    desktop.niri.enable = true;
     desktop.wayland.notifications = "dunst";
+    desktop.wayland.swww.enable = false;
+    desktop.wayland.wpaperd.enable = false;
+    desktop.wayland.caelestia.enable = false;
+    desktop.wayland.ax-shell.enable = false;
 
-    desktop.gnome.enable = true;
+    desktop.gnome.enable = false;
 
     applications.cli.emacs.enable = true;
 
     applications.kitty.enable = true;
+#    applications.gpg.enable = true;
 
     applications.btop.enable = true;
     applications.fastfetch.enable = true;
     applications.zathura.enable = true;
-    applications.iamb.enable = true;
+    applications.iamb.enable = false;
     applications.ranger.enable = true;
     applications.elements.enable = true;
     applications.iamb.extraConfig = ''
@@ -286,7 +326,7 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
 
 
   home.sessionVariables = {
-    EDITOR = "nvim";
+    EDITOR = "emacsclient";
   };
 
 
@@ -294,6 +334,7 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
   programs.orkan.enable = true;
 
 
+#  systemd.user.services.sops-nix.Service.After = ["graphical-session.target"];
   
 
   sops = {
@@ -314,8 +355,18 @@ LOCAL_PASSWORD=$(bw get password  89b6f4f0-e2ad-4bbb-95f8-b1a601383065 --session
       "passwords/chatgptapikey" = {};
     };
   };
+
+
+  services.kdeconnect.enable = true;
   
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = pkgs.lib.mkForce true;
 }
+
+
+
+
+
+
+

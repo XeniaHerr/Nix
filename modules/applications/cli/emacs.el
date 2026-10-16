@@ -1,16 +1,41 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
-(global-display-line-numbers-mode 1)
+(global-display-line-numbers-mode)
+
+( show-paren-mode 1)
+(setq show-paren-delay 0
+      kill-buffer-delete-auto-save-files t
+      create-lockfiles nil)
+
+(setf make-backup-files nil)
+
+(set-face-attribute 'show-paren-match nil
+		    :background "#000000")
+
 (defun move-line-up()
   (interactive)
   (transpose-lines 1)
   (forward-line -2)
   (indent-according-to-mode))
 
+(with-eval-after-load 'vterm
+    (add-to-list 'vterm-tramp-shells `(,teleport-tramp-method "/bin/bash")))
+
+(setq whitespace-style '(face
+    tabs spaces trailing space-before-tab 
+    indentation space-after-tab
+    space-mark tab-mark 
+    missing-newline-at-eof))
+
+;;(keymap-global-set "C-<tab>" 'fixup-whitespace)
+
+
+(add-hook 'prog-mode-hook '(lambda() (whitespace-mode)))
+(add-hook 'yaml-ts-mode-hook '(lambda() (whitespace-mode)))
 
 (keymap-global-set "M-#" (lambda () (interactive) (let ((current-prefix-arg -1))
-						    (call-interactively #'mark-word))))
+(call-interactively #'mark-word))))
 
 (keymap-global-set "<f6>" 'compile)
 (keymap-global-set "S-<f6>" 'recompile)
@@ -23,6 +48,25 @@
   (forward-line -1)
   (indent-according-to-mode))
 
+
+
+(defun duplicate-line-tsod()
+  "Version stolen from Tsoding"
+  (interactive)
+  (let ((column (- (point) (line-beginning-position)))
+	(line (let (( s (thing-at-point 'line t)))
+		(if s (string-remove-suffix "\n" s ) ""))))
+    (move-end-of-line 1)
+    (newline)
+    (insert line)
+    (move-beginning-of-line 1)
+    (forward-char column)
+    ))
+
+(keymap-global-set "C-x C-<down>" 'duplicate-line-tsod)
+
+
+
 (defun my/open-as-sudo()
   (interactive)
   (let ((p (point))
@@ -34,6 +78,12 @@
 
 (keymap-global-set "C-S-<down>" 'move-line-down)
 (keymap-global-set "C-S-<up>" 'move-line-up)
+
+(keymap-global-set "M-n" 'scroll-up-line)
+(keymap-global-set "M-p" 'scroll-down-line)
+(setq scroll-preserve-screen-position t)
+;;(setq scroll-margin  0      )
+
 
 (defun my/open-vterm (&optional prefix)
   (interactive "P")
@@ -62,6 +112,8 @@
 	 ( display-buffer-reuse-mode-window display-buffer-reuse-window display-buffer-same-window))
 	("\\*magit\\*"
 	 (display-buffer-same-window))))
+(setq compilation-scroll-output t)
+
 
 (defun only-this-buffer ()
   "Close all buffer except the active one"
@@ -70,23 +122,23 @@
 
 (setq inhibit-startup-screen t)
 (setq debug-on-eval nil)
+(setq debug-on-quit nil)
 
 (add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font"))
 
 (setq-default inhibit-startup-message nil)
-;;(setq shell-file-name "/bin/sh"
-;;explicit-shell-file-name "~/.nix-profile/bin/nu" )
+;; (setq shell-file-name "/bin/sh"
+;; explicit-shell-file-name "~/.nix-profile/bin/nu" )
 
 
 (setq gc-cons-threshold 100000000)
-
 (setq read-process-output-max (* 1024 1024))
 
-(setq scroll-step 1
-      scroll-conservatively 10000)
+;; (setq scroll-step 1
+;;       scroll-conservatively 10000)
 
 
-(setq next-line-add-newlines t)
+(setq next-line-add-newlines nil)
 
 
 (keymap-global-set "C-x C-b" 'ibuffer)
@@ -96,7 +148,6 @@
 (use-package ansi-color
   :demand t
   :hook (compilation-filter . ansi-color-compilation-filter))
-				
 
 (defun my/colorize-compilation-buf ()
   (let ((start (or ( bound-and-true-p compilation-filter-start) (point-min)))
@@ -108,81 +159,26 @@
 
 
 
-;;(use-package evil
-;;  :ensure t
-  ;;:custom
-  ;;(evil-want-keybinding nil)
-  ;; :bind
-  ;; (("M->" . next-buffer)
-  ;;  ("M-<" . previous-buffer)
-  ;;  (:map evil-normal-state-map (
-  ;; 				"g.r" . (kbd "/ C-r \" <return> cgn C-@"))))
-
-  ;; :init
-  ;; (setq evil-want-keybinding nil)
-  ;; (setq evil-undo-system 'undo-tree)
-  ;; (setq evil-search-module 'evil-search)
-  ;; :config
-
-  ;; (define-key evil-normal-state-map (kbd "g.r") (lambda ()
-  ;; 						  (interactive)
-  ;; 						  (execute-kbd-macro (kbd "/ C-r \" <return> cgn C-@"))))
-  ;; (global-set-key (kbd "M->") 'next-buffer)
-  ;; (global-set-key (kbd "M-<") 'previous-buffer)
-  ;; ;; (qevil-mode)
-;;  )
-
-;; (use-package evil-collection
-;; ;;  :ensure t
-;;   :after evil
-;;   ;;:custom
-;;   ;;(evil-want-keybinding nil)
-;;   :init
-;;   ;(setq evil-want-keybinding nil)
-;; ;  (evil-collection-init)
-;;   )
-
+(use-package expand-region
+  :ensure t
+  :bind (( "C-=" .'er/expand-region)))
 
 (use-package multiple-cursors
   :ensure t
   :bind ((	 "C->" . 'mc/mark-next-like-this)
 	 ( "C-<" . 'mc/mark-previous-like-this)
 	 ( "C-c C-<" . 'mc/mark-all-like-this)
+	 (" C-c C->" . 'mc/mark-all-in-region-regexp)
+	 (" C-S-c C-S-c" . 'mc/edit-lines)
+	 ("C-M-<" . 'mc/mark-more-like-this-extended)
   ))
-
-(use-package helm
-  :ensure t
-  :bind  ((
-	 "M-x" . helm-M-x)
-	("C-x C-f" . helm-find-files )
-	("C-x C-b" . helm-buffers-list)
-	("M-g i" .  helm-imenu)
-	("M-g I" . helm-imenu-in-all-buffers)
-	("M-g o" . helm-occur)
-	("C-c h" . helm-mini))
-  :config
-  (helm-mode 1)
-  (helm-ff-icon-mode 1 ))
-
-
-(use-package helm-projectile
-  :ensure t
-  :bind (:map projectile-mode-map
-	      ("C-c p f" . helm-projectile-find-file-dwim)
-	      ("C-c p p" . helm-projectile-switch-project)
-	      ("C-c p b" . helm-projectile-switch-to-buffer)
-	      ("C-c p s g" . helm-projectile-grep) ;;This is broken
-	      ;;("C-c p s r" . helm-projectile-rg)))
-	      ))
-
-
-(use-package helm-rg
-  :ensure t
-  )
 (use-package undo-tree
   :ensure t
   :config
-  (global-undo-tree-mode t))
+  (global-undo-tree-mode t)
+  )
+
+(setq undo-tree-history-directory-alist '(("." .   "~/emacs.d/undo-history")))
 
 
 (use-package catppuccin-theme
@@ -225,94 +221,78 @@
   (setq rust-mode-treesitter-derive t)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
+(use-package haskell-mode
+  :ensure t)
 
-(defun my/lsp-mode-hook ()
-  (message "my/lsp-mode-hook called")
-  (flycheck-mode t)
-  (company-mode t)
-  (when (and
-	 (fboundp 'lsp-feature?)
-	     (lsp-feature? "textDocument/inlayHint"))
-    (lsp-inlay-hints-mode t))
 
-  ;; (when (and
-  ;; 	 (fboundp 'lsp-feature?)
-  ;; 	     (lsp-feature? "textDocument/documentFormatting"))
-  ;;   (define-key evil-normal-state-map (kbd "=") #'lsp-format-buffer))
 
+(use-package eglot
+  :defer t
+  :config
   
-  (lsp-ui-mode t)
-  )
-(defun lsp-booster--advice-json-parse (old-fn &rest args)
-  "Try to parse bytecode instead of json."
-  (or
-   (when (equal (following-char) ?#)
-     (let ((bytecode (read (current-buffer))))
-       (when (byte-code-function-p bytecode)
-         (funcall bytecode))))
-   (apply old-fn args)))
-(advice-add (if (progn (require 'json)
-                       (fboundp 'json-parse-buffer))
-                'json-parse-buffer
-              'json-read)
-            :around
-            #'lsp-booster--advice-json-parse)
 
-(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-  "Prepend emacs-lsp-booster command to lsp CMD."
-  (let ((orig-result (funcall old-fn cmd test?)))
-    (if (and (not test?)                             ;; for check lsp-server-present?
-             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
-             lsp-use-plists
-             (not (functionp 'json-rpc-connection))  ;; native json-rpc
-             (executable-find "emacs-lsp-booster"))
-        (progn
-          (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
-            (setcar orig-result command-from-exec-path))
-          (message "Using emacs-lsp-booster for %s!" orig-result)
-          (cons "emacs-lsp-booster" orig-result))
-      orig-result)))
-(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
-(use-package lsp-mode
-  :ensure t
-  :init
-  (setq lsp-keymap-prefix "C-c l"
-	lsp-clients-clangd-args
-	'("--clang-tidy"
-	  "--background-index"
-	  "--completion-style=detailed"
-	  "--header-insertion=iwyu"
-	  "--inlay-hints=true"))
-  :bind ((
-	  "C-c C-/" . comment-or-uncomment-region))
-  :hook
-  (
-   (lsp-mode . my/lsp-mode-hook)
-   (lsp-configure . my/lsp-mode-hook)
-   (c-mode-common . lsp-deferred )
-   (nix-mode . lsp-deferred )
-   (LaTeX-mode . lsp-deferred)
-   (lisp-mode . lsp-deferred )
-   (typescript-mode . lsp-deferred)
-   (python-mode . lsp-deferred))
-  :commands (lsp lsp-deferred))
+(with-eval-after-load 'eglot
+
+  (with-eval-after-load 'typst-ts-mode
+
+    (add-to-list 'eglot-server-programs
+
+                 `((typst-ts-mode) .
+
+                   ,(eglot-alternatives `(,typst-ts-lsp-download-path
+
+                                          "tinymist"
+
+                                          "typst-lsp"))))
+    (with-eval-after-load 'qml-mode
+      (add-to-list 'eglot-server-programs
+		   `((qml-mode) . ("qmlls")))))
+:ensure t
+
+)
+)
 
 
 (use-package typescript-mode
   :ensure t)
 (use-package lsp-ui
   :ensure t
-  ;; :bind (:map evil-motion-state-map
-  ;; 	      ("K" . lsp-ui-doc-glance))
   :config
   (setq lsp-ui-doc-enable t
 	lsp-ui-sideline-show-hover nil
 	lsp-ui-doc-position 'at-point)
   :commands (lsp-ui-mode))
 
+
+
+
 (use-package which-key
   :ensure t
-  :config
+  :init
+  (setq which-key-separator "  ")
+  (require 'posframe)
+  (defun which-key-custom-popup-max-dimensions-function (ignore)
+  (cons (frame-height) (which-key--width-or-percentage-to-width which-key-side-window-max-width)))
+(defun fit-horizontally ()
+  (let ((fit-window-to-buffer-horizontally t))
+    (fit-window-to-buffer)))
+
+(defun which-key-custom-show-popup-function (act-popup-dim)
+    (when (posframe-workable-p)
+      (save-window-excursion
+    (posframe-show which-key--buffer :poshandler posframe-poshandler-frame-bottom-right-corner :border-width 1 :border-color "gray" :height (car act-popup-dim) :width (cdr act-popup-dim))
+  )))
+
+
+
+
+;; Should  be done like this
+(defun which-key-custom-hide-popup-function ()
+  (when (buffer-live-p which-key--buffer)
+  (posframe-hide which-key--buffer)))
+
+:config
+;;(setq which-key-popup-type 'custom)
   (which-key-mode 1))
 
 (use-package cargo-mode
@@ -350,32 +330,46 @@
   :config
   ;;  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
   )
-(use-package all-the-icons
-  :ensure t
-  )
 
 (use-package nerd-icons-dired
   :after nerd-icons
   :ensure t
-  :init
-  (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
 
-;; (use-package ivy-rich
-;;   :ensure t
-;;   )
+  :hook (dired-mode . nerd-icons-dired-mode))
 
-;; (use-package nerd-icons-ivy-rich
-;;   :ensure t
-;;   :after ivy-rich
-;;   :init (nerd-icons-ivy-rich-mode 1)
-;;   (ivy-rich-mode 1))
 
-;; (use-package all-the-icons
-;;   :ensure t)
+(use-package ivy-rich
+  :ensure t
+  )
+
+(use-package nerd-icons-ivy-rich
+  :ensure t
+  :after ivy-rich
+  :init (nerd-icons-ivy-rich-mode 1)
+  (ivy-rich-mode 1))
+
+(use-package counsel
+  :ensure t
+  :config
+  (counsel-mode 1)
+  )
+(use-package ivy
+  :ensure t
+  :config
+  ;; (ivy-mode 1)
+  )
+
+(use-package ivy-posframe
+  :ensure t
+  :config
+  ;; (ivy-posframe-mode 1)
+  )
+
 (use-package markdown-mode
   :ensure t
   :defer t
   :config
+  (setq markdown-command "pandoc")
   (custom-set-faces
    '(markdown-header-face (( t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
    '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.8))))
@@ -391,7 +385,20 @@
 
 
 (use-package python-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq python-shell-switch-buffers-on-execute nil
+	py-keep-windows-configuration t
+	py-split-window-on-execute nil
+	py-switch-buffers-on-execute-p nil)
+  (add-to-list `display-buffer-alist
+	       '("\\*Python\\*"
+		 ( display-buffer-reuse-window display-buffer-use-some-frame
+		   )
+		 )
+	       
+	       )
+  )
 
 
 (use-package vterm
@@ -439,7 +446,11 @@
   :bind ((
 	  "C-c n f" . org-roam-node-find)
 	 ("C-c n c" . org-roam-capture)
-	 ("C-c n i" . org-roam-node-insert))
+	 ("C-c n i" . org-roam-node-insert)
+	 :map org-mode-map
+	 ("C-c n t a" . org-roam-tag-add)
+	 ("C-c n t d" . org-roam-tag-remove )
+	 	 )
   :custom
   (org-roam-directory (file-truename "~/org-roam"))
   (org-roam-node-level 'headline)
@@ -456,6 +467,9 @@
 				     ("S" "Satz" plain "* ${title}\n\n* Aussage\n%?\n* Proof"
 				     :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :Math:")
 				     :unnarrowed t)
+				     ("D" "Definition" plain "* ${title}\n%?"
+				      :target (file+head "${slug}.org" "#+title: ${title}\n#+filetags: :Math:")
+				      :unnarrowed t)
 				     ))
   (org-roam-setup))
 
@@ -474,9 +488,12 @@
 	 )
   :config
   (add-to-list 'company-backends 'company-files)
+    (add-to-list 'company-backends 'company-capf 'company-math-symbols-unicode)
   :hook
-  ((prog-mode . company-mode))
+  ((prog-mode . company-mode)
+   (typst-ts-mode . company-mode))
   )
+
 
 
 (use-package company-nixos-options
@@ -487,7 +504,14 @@
 (use-package company-auctex
   :ensure t
   :after company
+  :config
+  (add-to-list 'company-backends 'company-math-symbols-unicode)
   )
+
+
+(use-package company-math
+  :ensure t
+  :after company)
 
 (use-package yasnippet
   :ensure t
@@ -499,12 +523,16 @@
   :ensure t
   :config
   (define-key projectile-mode-map (kbd "C-c p") `projectile-command-map)
-  (setq projectile-switch-project-action 'projectile-commander)
+  (setq projectile-switch-project-action 'projectile-dispatch)
   (projectile-mode 1)
   )
 
 (use-package nerd-icons
-  :ensure t)
+  :ensure t
+  :init
+  (add-to-list 'nerd-icons-mode-icon-alist '( nix-mode nerd-icons-mdicon "nf-md-nixos" :face nerd-icons-blue))
+  (add-to-list 'nerd-icons-mode-icon-alist '( nix-ts-mode nerd-icons-mdicon "nf-md-nixos" :face nerd-icons-blue))
+  )
 
 (use-package doom-modeline
   :ensure t
@@ -521,6 +549,11 @@
 (use-package smartparens
   :ensure t  ;; install the package
   :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :bind (( "C-M-)" . sp-slurp-hybrid-sexp)
+	 ("C-M-(" . sp-backward-slurp-sexp)
+	 ("C-|" . sp-split-sexp)
+	 ("C-M-|" . sp-join-sexp)
+	 )
   :config
   ;; load default config
   (require 'smartparens-config))
@@ -539,6 +572,8 @@
 
 (use-package jupyter
   :ensure t
+  :config
+  (setq jupyter-repl-echo-eval-p t)
   )
 
 
@@ -564,6 +599,13 @@
 (use-package hydra
   :ensure t
   :config
+
+  (defhydra hydra-smerge (smerge-mode-map "C-c ^ ^")
+					  "easier merging"
+					  "l" smerge-keep-lower "lower"
+					  "u" smerge-keep-upper "upper"
+					  "n" smerge-next "next"
+					  "p" smerge-prev "prev")
   (defhydra hydra-m-g (global-map "M-g")
 	    "navigate with m-g"
 	    ("M-n" next-error "next")
@@ -572,3 +614,105 @@
 
 
 
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode)
+  )
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  )
+
+(use-package consult
+  :ensure t
+  :bind ((
+	  "C-x b" . consult-buffer)
+	 ("M-g i" . consult-imenu)
+	 ("M-g M-i" . consult-imenu-multi)
+	 ("M-g M-g" . consult-goto-line)
+	 ("M-s g" . consult-grep)
+	 ("M-s d" . consult-find)
+	 ("M-s l" . consult-line)
+	 ("M-s L" . consult-line-multi)
+	 ("M-s k" . consult-keep-lines)
+	 ("M-s u" . consult-focus-lines)
+	 ("M-y" . consult-yank-pop)
+	 :map minibuffer-local-map
+	 ("M-s" . consult-history)
+	 ("M-r" . consult-history)
+
+	 )
+  )
+
+(use-package marginalia
+  :ensure t
+  :bind (
+	 :map minibuffer-mode-map
+	      ("M-A" . marginalia-cycle)	      )
+  :init
+  (marginalia-mode)
+  )
+
+
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)
+   ("M-." . embark-dwim)
+   ))
+
+(use-package embark-consult
+  :ensure t
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
+
+
+
+(use-package typst-ts-mode
+  :ensure t)
+
+(use-package qml-mode
+  :ensure t)
+
+(use-package go-mode
+	     :ensure t)
+
+(use-package rocq-mode
+  :vc (:url "https://codeberg.org/jpoiret/rocq-mode.el.git"
+            :rev :newest)
+;;  :ensure t
+  :defer t
+  :mode ("\\.v\\'" . rocq-mode)
+  :hook
+    (rocq-mode . rocq-follow-viewport-mode)
+    (rocq-mode . rocq-auto-goals-at-point-mode)
+  :config
+  (set-face-attribute 'rocq-mode-processing-face nil :background 'unspecified)
+  (set-face-attribute 'rocq-mode-last-request nil :background "black")
+    
+    ;; (add-to-list 'auto-mode-alist '("\\.v\\'" . rocq-mode))
+    :init
+    :custom
+    ;; Whether to show the goal above the context, default is `t`
+    (rocq-top-goal t))
+
+
+(use-package teleport
+  :ensure t
+  :init
+  (teleport-tramp-add-method)
+  (add-to-list 'tramp-default-user-alist
+             '("\\`tsh\\'" nil "root"))
+
+  ;; Commands from this keymap are called with `default-directory' set to the remote host when called from `teleport-list-nodes' mode.
+  :bind (:map teleport-list-nodes-mode-map
+              ("v" . vterm)
+              ("t" . term)
+              ("d" . dired)
+	      :map global-map
+	      ("C-c t l" . teleport-list-nodes))
+
+  )

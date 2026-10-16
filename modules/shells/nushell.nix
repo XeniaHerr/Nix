@@ -11,6 +11,8 @@
     pkgs.nushell
     pkgs.nu_scripts
   ];
+
+  programs.eza.enable = lib.mkForce false;
   programs.nushell = {
 
   enable = true;
@@ -67,20 +69,29 @@ export def ns [
         | select package description version
         | update package {|row| $row.package | str replace $"legacyPackages.($info.arch)-($info.ostype)." ""}
 }
+
+export def ttsh [ address : string] {
+       with-env {TERM : "xterm" } {tsh ssh $address}
+}
+
+export def tssh [ address : string] {
+       with-env {TERM : "xterm" } { ssh $address}
+}
+
   zoxide init nushell | save -f ~/.zoxide.nu
   '';
 
 
-  shellAliases = {
+  # shellAliases = {
 
-    la = "ls -la";
+  #   la = "ls -la";
 
-    nv = "nvim";
+  #   nv = "nvim";
 
-    cat = "bat";
-    ecc = "emacsclient -c";
-      } //
-        lib.optionalAttrs (config.host.shells.aliases.enable) config.host.shells.aliases.aliases;
+  #   cat = "bat";
+  #   ecc = "emacsclient -c";
+  #     } //
+  #       lib.optionalAttrs (config.host.shells.aliases.enable) config.host.shells.aliases.aliases;
 
   plugins = [
     pkgs.nushellPlugins.query

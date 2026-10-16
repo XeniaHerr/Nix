@@ -10,31 +10,12 @@ in
   config = {
 
   services.kanshi = {
-    enable = true;
-      systemdTarget = "hyprland-session.target";
+    enable  = false; #  if config.host.desktop.windowManager == "niri" then false else true;
+      systemdTarget =  if config.host.desktop.windowManager == "niri" then "niri.service" else "hyprland-session.target";
 
     settings = [  
 
-
-        {
-      profile.name = "default";
-
-      profile.outputs = [
-        {
-          scale = 1.0;
-          status = "enable";
-          criteria = "eDP-1";
-        }
-
-        #Enable all other displays
-        { scale = 1.0;
-          status = "enable";
-          criteria = "*";
-        }
-      ];
-    }
-
-      {
+{
 
         profile.name = "dock";
 
@@ -61,11 +42,46 @@ in
           }
           {
             scale = 1.0;
-            status = "disable";
+            status = "enable";
             criteria = "eDP-1";
           }
         ];
       }
+        {
+      profile.name = "default";
+
+      profile.outputs = [
+        {
+          scale = 1.0;
+          status = "enable";
+          criteria = "eDP-1";
+        }
+
+      ];
+    }
+
+
+        {
+      profile.name = "one_random_monitor";
+
+      profile.outputs = [
+        {
+          scale = 1.0;
+          status = "enable";
+          criteria = "Lenovo Group Limited 0x403A";
+        }
+
+       # Enable all other displays
+        { scale = 1.0;
+          status = "enable";
+          criteria = "*";
+        }
+      ];
+    }
+
+
+        
+      
     ];
   };
 

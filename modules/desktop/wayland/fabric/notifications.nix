@@ -17,7 +17,7 @@ in
 
 
     home.packages =  with pkgs; [ 
-      python313
+      #python313
       run-widget
     ];
 

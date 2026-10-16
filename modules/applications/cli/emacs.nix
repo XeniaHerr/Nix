@@ -17,6 +17,11 @@ with lib;
       pkgs.zip
       pkgs.emacs-lsp-booster
       pkgs.ripgrep
+      pkgs.tinymist
+      pkgs.java-language-server
+      pkgs.maven
+      pkgs.pandoc
+
     ];
 
     services.lorri.enable = true;
@@ -34,10 +39,26 @@ with lib;
         config = ./emacs.el;
 
         defaultInitFile = true;
-
+        override = epkgs: epkgs //  {
+          typst-preview = pkgs.callPackage ./typst-preview.nix {
+            inherit (pkgs) fetchFromGitHub;
+            inherit (epkgs) melpaBuild websocket f;};
+          lean-4-mode = pkgs.callPackage ./lean4-mode.nix {
+            inherit (pkgs) fetchFromGithub;
+            inherit (epkgs) melpaBuild;};
+        nael-mode = pkgs.callPackage ./nael-mode.nix {
+          inherit (pkgs) fetchgit;
+          inherit (epkgs) melpaBuild;};
+        };
         extraEmacsPackages = epkgs: [
           epkgs.visual-replace
           epkgs.treesit-grammars.with-all-grammars
+          epkgs.typst-preview
+          #          epkgs.lean-4-mode
+          #          epkgs.nael-mode
+          epkgs.nael
+
+          #epkgs.websocket
         ];
 
 

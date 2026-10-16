@@ -8,6 +8,8 @@
 
   home.packages = with pkgs; [
     mattermost-desktop
+    spotify
+    spotatui
     discord
   ];
 }

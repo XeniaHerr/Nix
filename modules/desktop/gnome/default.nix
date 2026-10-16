@@ -17,12 +17,13 @@
       tweaks-in-system-menu
       pkgs.gnome-tweaks
       workspace-matrix
+      dash-to-dock
     ];
 
-  services.gnome-keyring = {
-    enable = true;
-    components = [ "secrets" "pkcs11"];
-  };
+#   services.gnome-keyring = {
+#  #   enable = true;
+# #    components = [ "secrets" "pkcs11"];
+#   };
 
 
 
@@ -34,6 +35,7 @@
                                 pkgs.gnomeExtensions.tweaks-in-system-menu.extensionUuid
                                 pkgs.gnomeExtensions.system-monitor.extensionUuid
                                 pkgs.gnomeExtensions.just-perfection.extensionUuid
+                                pkgs.gnomeExtensions.dash-to-dock.extensionUuid
                                ];
         };
         "org/gnome/desktop/interface".show-battery-percentage = true;
